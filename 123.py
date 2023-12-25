@@ -64,10 +64,9 @@ def call_func3():
     return
 
 
-start_button = Button(width / 2 - 150, 50, 300, 75, 'Старт!', call_func1)
-history_button = Button(width / 2 - 150, 150, 300, 75, 'История', call_func2)
-exit_button = Button(width / 2 - 150, 250, 300, 75, 'Выйти', call_func3)
-
+start_button = Button(width / 2 - 150, height / 5, 300, 75, 'Старт!', call_func1)
+history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
+exit_button = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
 
 # Конец кода с кнопками
 
@@ -87,23 +86,8 @@ def terminate():
 
 
 def start_screen():
-    intro_text = ["ЗАСТАВКА", "",
-                  "Правила игры",
-                  "Если в правилах несколько строк,",
-                  "приходится выводить их построчно"]
-
     fon = pygame.transform.scale(load_image('fon.jpg'), (size))
     screen.blit(fon, (0, 0))
-    font = pygame.font.Font(None, 30)
-    text_coord = 50
-    for line in intro_text:
-        string_rendered = font.render(line, 1, pygame.Color('black'))
-        intro_rect = string_rendered.get_rect()
-        text_coord += 10
-        intro_rect.top = text_coord
-        intro_rect.x = 10
-        text_coord += intro_rect.height
-        screen.blit(string_rendered, intro_rect)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -112,7 +96,7 @@ def start_screen():
             elem.process()
             if start_button.alreadyPressed:  # Функция кнопки старт
                 return
-            if exit_button.alreadyPressed:   # Функция кнопки выйти
+            if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
         pygame.display.flip()
         clock.tick(FPS)
@@ -144,11 +128,10 @@ tile_images = {
 }
 player_image = pygame.transform.scale(load_image('mainch.png'), (43, 43))
 
-
 tile_width = tile_height = 50
 
 
-class DecorCreate(pygame.sprite.Sprite): #Класс для создания декораторов
+class DecorCreate(pygame.sprite.Sprite):  # Класс для создания декораторов
     def __init__(self, pos_x, pos_y, file_name, size):
         super().__init__(decor_group, all_sprites)
         self.image = pygame.transform.scale(load_image(file_name), (size))  # Adjust the size as needed
@@ -167,13 +150,15 @@ class Tile(pygame.sprite.Sprite):
 class Black(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
-        self.image = pygame.transform.scale(load_image('black_light.png'), (4000, 4000)) # Загрузка и масштабирование изображения
+        self.image = pygame.transform.scale(load_image('black_light.png'),
+                                            (4000, 4000))  # Загрузка и масштабирование изображения
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
 
     def update(self):
         self.rect.x = player.rect.x - 2000
         self.rect.y = player.rect.y - 2000
+
 
 class BlockTile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
@@ -228,7 +213,6 @@ class Player(pygame.sprite.Sprite):
                     for sprite in decor_group:
                         sprite.rect.x -= self.vx
                 collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
-                print(pygame.sprite.spritecollide(self, block_tiles_group, False))
                 for sprite in collision_sprites:
                     if sprite != self:
                         for sprite in tiles_group:
@@ -264,7 +248,6 @@ class Player(pygame.sprite.Sprite):
 
                 # Проверка на столкновение с препятствиями
                 collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
-                print(pygame.sprite.spritecollide(self, block_tiles_group, False))
                 for sprite in collision_sprites:
                     if sprite != self:
                         for sprite in tiles_group:
@@ -276,11 +259,11 @@ class Player(pygame.sprite.Sprite):
                         for sprite in decor_group:
                             sprite.rect.y += self.vy
             collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
-            print(pygame.sprite.spritecollide(self, block_tiles_group, False))
             for sprite in collision_sprites:
                 if sprite != self:
                     self.rect.x = old_x
                     self.rect.y = old_y
+
 
 player = None
 decor_group = pygame.sprite.Group()
@@ -291,8 +274,8 @@ block_tiles_group = pygame.sprite.Group()
 black_l = Black(0, 0)
 bonfire = DecorCreate(4, 2, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
-big_trees = [(0, 1), (6, 0), (1, 6), (16, 4)] #Массив с координатами деревьев
-for e in big_trees: #Проходимся по массиву и создаём деревья
+big_trees = [(0, 1), (6, 0), (1, 6), (16, 4)]  # Массив с координатами деревьев
+for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
 
 
@@ -312,6 +295,7 @@ def blit_text(surface, text, pos, font, color=pygame.Color('white')):
             x += word_width + space
         x = pos[0]
         y += word_height
+
 
 def generate_level(level):
     new_player, x, y = None, None, None
@@ -335,7 +319,6 @@ def generate_level(level):
 
 
 player, level_x, level_y = generate_level(load_level('map0.txt'))
-
 
 # группа, содержащая все спрайты
 all_sprites = pygame.sprite.Group()
