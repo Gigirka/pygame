@@ -1,8 +1,8 @@
 import os
 import random
 import sys
-
 import pygame
+pygame.mixer.pre_init(44100, -16, 1, 512)
 
 pygame.init()
 size = width, height = 1000, 600
@@ -11,7 +11,8 @@ FPS = 50
 clock = pygame.time.Clock()
 # Начиная со следующий строчки, идёт код, связанный с кнопками
 font = pygame.font.SysFont('Arial', 40)
-
+wind_sound = pygame.mixer.Sound("data/wind.ogg")
+step_sound = pygame.mixer.Sound("data/step.ogg")
 objects = []
 
 
@@ -95,6 +96,8 @@ def start_screen():
         for elem in objects:  # Отображаем кнопки на экране
             elem.process()
             if start_button.alreadyPressed:  # Функция кнопки старт
+                wind_sound.set_volume(0.5)
+                wind_sound.play(-1)
                 return
             if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
@@ -338,6 +341,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
+            step_sound.play(-1)
             player.move = True
             if event.key == pygame.K_LEFT:
                 player.vx = -8
@@ -348,6 +352,7 @@ while running:
             elif event.key == pygame.K_DOWN:
                 player.vy = 8
         if event.type == pygame.KEYUP:
+            step_sound.stop()
             player.move = False
             if event.key in [pygame.K_LEFT, pygame.K_RIGHT]:
                 player.vx = 0
