@@ -2,6 +2,7 @@ import os
 import random
 import sys
 import pygame
+
 pygame.mixer.pre_init(44100, -16, 1, 512)
 
 pygame.init()
@@ -69,6 +70,7 @@ start_button = Button(width / 2 - 150, height / 5, 300, 75, 'Старт!', call_
 history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
 exit_button = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
 
+
 # Конец кода с кнопками
 
 def load_image(name):
@@ -129,7 +131,7 @@ tile_images = {
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
 }
-player_image = pygame.transform.scale(load_image('mainch.png'), (43, 43))
+player_image = pygame.transform.scale(load_image('stop_hero.png'), (43, 43))
 
 tile_width = tile_height = 50
 
@@ -169,6 +171,118 @@ class BlockTile(pygame.sprite.Sprite):
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+
+
+class AnimatedSprite(pygame.sprite.Sprite):
+    def __init__(self, sheet, columns, rows, pos_x, pos_y):
+        super().__init__(player_group, all_sprites)
+        self.frames = []
+        self.cut_sheet(sheet, columns, rows)
+        self.cur_frame = 0
+        self.image = self.frames[self.cur_frame]
+        self.vy = 0
+        self.vx = 0
+        self.move = False
+        self.health = 10
+        self.image = player_image
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x + 15, tile_height * pos_y + 5)
+
+    def draw(self):
+        self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
+        pygame.draw.rect(screen, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))  # NEW
+        pygame.draw.rect(screen, (0, 128, 0),
+                         (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))  # NEW
+
+    def update(self):
+        if self.move:
+            old_x = self.rect.x
+            old_y = self.rect.y
+
+            if self.rect.x + self.vx <= width - width // 6 and self.rect.x + self.vx >= width // 6:
+                self.rect.x += self.vx
+            else:
+                if self.rect.x + self.vx < width // 5:
+                    for sprite in tiles_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in block_tiles_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in decor_group:
+                        sprite.rect.x -= self.vx
+
+                if self.rect.x + self.vx > width - width // 5:
+                    for sprite in tiles_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in block_tiles_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in decor_group:
+                        sprite.rect.x -= self.vx
+                collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+                for sprite in collision_sprites:
+                    if sprite != self:
+                        for sprite in tiles_group:
+                            sprite.rect.x += self.vx
+
+                        for sprite in block_tiles_group:
+                            sprite.rect.x += self.vx
+
+                        for sprite in decor_group:
+                            sprite.rect.x += self.vx
+            if self.rect.y + self.vy <= height - height // 6 and self.rect.y + self.vy >= height // 6:
+                self.rect.y += self.vy
+            else:
+                if self.rect.y + self.vy < height // 5:
+                    for sprite in tiles_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in block_tiles_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in decor_group:
+                        sprite.rect.y -= self.vy
+
+                if self.rect.y + self.vy > height - height // 5:
+                    for sprite in tiles_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in block_tiles_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in decor_group:
+                        sprite.rect.y -= self.vy
+
+                # Проверка на столкновение с препятствиями
+                collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+                for sprite in collision_sprites:
+                    if sprite != self:
+                        for sprite in tiles_group:
+                            sprite.rect.y += self.vy
+
+                        for sprite in block_tiles_group:
+                            sprite.rect.y += self.vy
+
+                        for sprite in decor_group:
+                            sprite.rect.y += self.vy
+            collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+            for sprite in collision_sprites:
+                if sprite != self:
+                    self.rect.x = old_x
+                    self.rect.y = old_y
+
+    def cut_sheet(self, sheet, columns, rows):
+        self.rect = pygame.Rect(0, 0, sheet.get_width() // columns, sheet.get_height() // rows)
+        for j in range(rows):
+            for i in range(columns):
+                frame_location = (self.rect.w * i, self.rect.h * j)
+                self.frames.append(sheet.subsurface(pygame.Rect(frame_location, self.rect.size)))
+
+    def update(self):
+        self.cur_frame = (self.cur_frame + 1) % len(self.frames)
+        self.image = self.frames[self.cur_frame]
 
 
 class Player(pygame.sprite.Sprite):
@@ -330,7 +444,6 @@ clock = pygame.time.Clock()
 player.draw()
 sign_image = pygame.transform.scale(load_image('sign.png'), (450, 120))
 sign_rect = sign_image.get_rect(center=(700, 500))
-
 text = ("""Привет, незнакомец! Ты попал 
 в лабиринт, который находится 
 вне времени и пространства...""")
@@ -347,6 +460,13 @@ while running:
                 player.vx = -8
             elif event.key == pygame.K_RIGHT:
                 player.vx = 8
+                player_run = AnimatedSprite(load_image("hero.png"), 5, 1, player.rect.x, player.rect.y)
+                player_run.draw()
+                player.kill()
+                player_run.update()
+                all_sprites.draw(screen)
+                all_sprites.update()
+                pygame.display.flip()
             elif event.key == pygame.K_UP:
                 player.vy = -8
             elif event.key == pygame.K_DOWN:
