@@ -135,20 +135,42 @@ tile_images = {
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
 }
+player_size = 70, 70
+walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/4.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/3.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/2.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/1.png'), (player_size))]
 
-walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/4.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/3.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/2.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/1.png'), (80, 80))]
+walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/2.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/3.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/4.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/5.png'), (player_size))]
 
-walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/2.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/3.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/4.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/5.png'), (80, 80))]
+hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (40, 40))]
 
-hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (50, 50))]
+enemy_size = 280, 280
+enemyAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_001.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_002.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_003.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_005.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_006.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_007.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_008.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_009.png'), (enemy_size))]
+
+enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_001.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_002.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_003.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_004.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_005.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_006.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_007.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_008.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_009.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (enemy_size))]
 
 tile_width = tile_height = 50
 
@@ -208,7 +230,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(images[self.index],
                                             (50, 50))  # 'image' is the current image of the animation.
         self.rect = self.image.get_rect().move(
-            tile_width * pos_x + 15, tile_height * pos_y + 5)
+            tile_width * pos_x + 15, tile_height * pos_y)
 
         self.animation_time = 0.05
         self.current_time = 0
@@ -268,10 +290,10 @@ class Player(pygame.sprite.Sprite):
             old_x = self.rect.x
             old_y = self.rect.y
 
-            if self.rect.x + self.vx <= width - width // 6 and self.rect.x + self.vx >= width // 6:
+            if self.rect.x + self.vx <= width - width // 5 and self.rect.x + self.vx >= width // 5:  # Движение "внутри рамки" по горизонтали
                 self.rect.x += self.vx
-            else:
-                if self.rect.x + self.vx < width // 5:
+            else:  # Если персонаж "выходит за рамку" по горизонтали
+                if self.rect.x + self.vx < width // 5:  # Движение налево
                     for sprite in tiles_group:
                         sprite.rect.x -= self.vx
 
@@ -281,7 +303,10 @@ class Player(pygame.sprite.Sprite):
                     for sprite in decor_group:
                         sprite.rect.x -= self.vx
 
-                if self.rect.x + self.vx > width - width // 5:
+                    for sprite in enemy_group:
+                        sprite.rect.x -= self.vx
+
+                if self.rect.x + self.vx > width - width // 5:  # Движение направо
                     for sprite in tiles_group:
                         sprite.rect.x -= self.vx
 
@@ -289,6 +314,9 @@ class Player(pygame.sprite.Sprite):
                         sprite.rect.x -= self.vx
 
                     for sprite in decor_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in enemy_group:
                         sprite.rect.x -= self.vx
                 collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
                 for sprite in collision_sprites:
@@ -301,10 +329,13 @@ class Player(pygame.sprite.Sprite):
 
                         for sprite in decor_group:
                             sprite.rect.x += self.vx
-            if self.rect.y + self.vy <= height - height // 6 and self.rect.y + self.vy >= height // 6:
+
+                        for sprite in enemy_group:
+                            sprite.rect.x += self.vx
+            if self.rect.y + self.vy <= height - height // 2 and self.rect.y + self.vy >= height // 2:  # Движение "внутри рамки" по вертикали
                 self.rect.y += self.vy
-            else:
-                if self.rect.y + self.vy < height // 5:
+            else:  # Если персонаж "выходит за рамку" по вертикали
+                if self.rect.y + self.vy < height // 2:  # Движение наверх
                     for sprite in tiles_group:
                         sprite.rect.y -= self.vy
 
@@ -314,7 +345,10 @@ class Player(pygame.sprite.Sprite):
                     for sprite in decor_group:
                         sprite.rect.y -= self.vy
 
-                if self.rect.y + self.vy > height - height // 5:
+                    for sprite in enemy_group:
+                        sprite.rect.y -= self.vy
+
+                if self.rect.y + self.vy > height - height // 3:  # Движение вниз
                     for sprite in tiles_group:
                         sprite.rect.y -= self.vy
 
@@ -322,6 +356,9 @@ class Player(pygame.sprite.Sprite):
                         sprite.rect.y -= self.vy
 
                     for sprite in decor_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in enemy_group:
                         sprite.rect.y -= self.vy
 
                 # Проверка на столкновение с препятствиями
@@ -336,6 +373,9 @@ class Player(pygame.sprite.Sprite):
 
                         for sprite in decor_group:
                             sprite.rect.y += self.vy
+
+                        for sprite in enemy_group:
+                            sprite.rect.y += self.vy
             collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
             for sprite in collision_sprites:
                 if sprite != self:
@@ -343,13 +383,102 @@ class Player(pygame.sprite.Sprite):
                     self.rect.y = old_y
 
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(enemy_group, all_sprites)
+        # self.vy = 0
+        # self.vx = 0
+        self.move = False
+        self.health = 10
+        # size = (32, 32)  # This should match the size of the images.
+        images = enemyAttack + enemyStand
+        self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
+        self.images = images
+        self.images_attack = images[0:8]
+        self.images_idle = images[10:16]
+        self.index = 0
+        self.last_attack_time = 0
+
+        self.image = pygame.transform.scale(images[self.index],
+                                            (5, 5))  # 'image' is the current image of the animation.
+        # Переопределяем координаты коллизии
+
+        # self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
+
+        self.animation_time = 0.05
+        self.current_time = 0
+
+        self.timee = 0
+
+        self.animation_frames = 6
+        self.current_frame = 0
+
+    def update_time_dependent(self, dt):
+        """
+        Updates the image of Sprite approximately every 0.1 second.
+
+        Args:
+            dt: Time elapsed between each frame.
+        """
+        self.timee += 1
+        if self.rect.colliderect(player.rect):
+            self.images = self.images_attack
+            self.last_attack_time = self.timee
+        else:
+            self.images = self.images_idle
+
+        self.current_time += dt
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+        # self.rect.move_ip(*self.velocity)
+
+    def update_frame_dependent(self):
+        """
+        Updates the image of Sprite every 6 frame (approximately every 0.1 second if frame rate is 60).
+        """
+        if self.rect.colliderect(player.rect):
+            self.images = self.images_attack
+        else:
+            self.images = self.images_idle
+
+        self.current_frame += 1
+        if self.current_frame >= self.animation_frames:
+            self.current_frame = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+        if self.current_time - self.last_attack_time >= 5000:
+            # It has been 5 seconds, so attack
+            self.images = self.images_attack
+        else:
+            # It hasn't been 5 seconds yet, so idle
+            self.images = self.images_idle
+
+        # self.rect.move_ip(*self.velocity)
+
+    def draw(self):
+        self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
+        pygame.draw.rect(screen, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))  # NEW
+        pygame.draw.rect(screen, (0, 128, 0),
+                         (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))  # NEW
+
+    def update(self):
+        pass
+
+
 player = None
 decor_group = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
 black_l = Black(0, 0)
+enemy1 = Enemy(220, 380)
+enemy2 = Enemy(340, 380)
 bonfire = DecorCreate(4, 2, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
 big_trees = [(0, 1), (6, 0), (1, 6), (16, 4)]  # Массив с координатами деревьев
@@ -392,6 +521,8 @@ def generate_level(level):
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
+            elif level[y][x] == '$':
+                Tile('empty', x, y)
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -448,6 +579,10 @@ while running:
                 player.vy = 0
 
     all_sprites.update(dt)
+    for enemy_class in enemy_group:
+        enemy_class.update()
+        enemy_class.update_time_dependent(dt)
+        enemy_class.update_frame_dependent()
     player.update()
     player.update_time_dependent(dt)
     player.update_frame_dependent()
@@ -459,6 +594,7 @@ while running:
     all_sprites.draw(screen)
     tiles_group.draw(screen)
     block_tiles_group.draw(screen)
+    enemy_group.draw(screen)
     decor_group.draw(screen)
     player_group.draw(screen)
     screen.blit(sign_image, sign_rect)
