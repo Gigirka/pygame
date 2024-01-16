@@ -1,8 +1,9 @@
 import os
 import random
 import sys
-
 import pygame
+
+pygame.mixer.pre_init(44100, -16, 1, 512)
 
 pygame.init()
 size = width, height = 1000, 600
@@ -11,8 +12,13 @@ FPS = 50
 clock = pygame.time.Clock()
 # Начиная со следующий строчки, идёт код, связанный с кнопками
 font = pygame.font.SysFont('Arial', 40)
-
+wind_sound = pygame.mixer.Sound("data/wind.ogg")
+step_sound = pygame.mixer.Sound("data/step.ogg")
 objects = []
+
+left = False
+right = False
+animCount = 0
 
 
 class Button():
@@ -68,6 +74,7 @@ start_button = Button(width / 2 - 150, height / 5, 300, 75, 'Старт!', call_
 history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
 exit_button = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
 
+
 # Конец кода с кнопками
 
 def load_image(name):
@@ -95,6 +102,8 @@ def start_screen():
         for elem in objects:  # Отображаем кнопки на экране
             elem.process()
             if start_button.alreadyPressed:  # Функция кнопки старт
+                wind_sound.set_volume(0.5)
+                wind_sound.play(-1)
                 return
             if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
@@ -126,7 +135,20 @@ tile_images = {
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
 }
-player_image = pygame.transform.scale(load_image('mainch.png'), (43, 43))
+
+walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (80, 80)),
+            pygame.transform.scale(load_image('hero_left/4.png'), (80, 80)),
+            pygame.transform.scale(load_image('hero_left/3.png'), (80, 80)),
+            pygame.transform.scale(load_image('hero_left/2.png'), (80, 80)),
+            pygame.transform.scale(load_image('hero_left/1.png'), (80, 80))]
+
+walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (80, 80)),
+             pygame.transform.scale(load_image('hero_right/2.png'), (80, 80)),
+             pygame.transform.scale(load_image('hero_right/3.png'), (80, 80)),
+             pygame.transform.scale(load_image('hero_right/4.png'), (80, 80)),
+             pygame.transform.scale(load_image('hero_right/5.png'), (80, 80))]
+
+hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (50, 50))]
 
 tile_width = tile_height = 50
 
@@ -174,10 +196,66 @@ class Player(pygame.sprite.Sprite):
         self.vy = 0
         self.vx = 0
         self.move = False
-        self.health = 100
-        self.image = player_image
+        self.health = 10
+        # size = (32, 32)  # This should match the size of the images.
+        images = walkLeft + walkRight + hero_Stand
+        # self.rect = pygame.Rect(position, size)
+        self.images = images
+        self.images_right = images[0:5]
+        self.images_left = images[5:10]
+        self.images_stop = [images[-1]]
+        self.index = 0
+        self.image = pygame.transform.scale(images[self.index],
+                                            (50, 50))  # 'image' is the current image of the animation.
         self.rect = self.image.get_rect().move(
             tile_width * pos_x + 15, tile_height * pos_y + 5)
+
+        self.animation_time = 0.05
+        self.current_time = 0
+
+        self.animation_frames = 6
+        self.current_frame = 0
+
+    def update_time_dependent(self, dt):
+        """
+        Updates the image of Sprite approximately every 0.1 second.
+
+        Args:
+            dt: Time elapsed between each frame.
+        """
+        if self.vx < 0 or self.vy > 0:  # Use the right images if sprite is moving right.
+            self.images = self.images_right
+        elif self.vx > 0 or self.vy < 0:
+            self.images = self.images_left
+        elif self.vx == 0 and self.vy == 0:
+            self.images = self.images_stop
+
+        self.current_time += dt
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+        # self.rect.move_ip(*self.velocity)
+
+    def update_frame_dependent(self):
+        """
+        Updates the image of Sprite every 6 frame (approximately every 0.1 second if frame rate is 60).
+        """
+        if self.vx < 0:  # Use the right images if sprite is moving right.
+            self.images = self.images_right
+        elif self.vx > 0:
+            self.images = self.images_left
+        elif self.vx == 0 and self.vy == 0:
+            self.images = self.images_stop
+
+        self.current_frame += 1
+        if self.current_frame >= self.animation_frames:
+            self.current_frame = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+        # self.rect.move_ip(*self.velocity)
 
     def draw(self):
         self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
@@ -334,27 +412,46 @@ text = ("""Привет, незнакомец! Ты попал
 displayed_text = ""
 counter = 0
 while running:
+    dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
+            step_sound.play(-1)
             player.move = True
             if event.key == pygame.K_LEFT:
                 player.vx = -8
+                left = True
+                right = False
             elif event.key == pygame.K_RIGHT:
                 player.vx = 8
+                left = False
+                right = True
             elif event.key == pygame.K_UP:
                 player.vy = -8
+                left = False
+                right = True
             elif event.key == pygame.K_DOWN:
                 player.vy = 8
+                left = False
+                right = True
+            else:
+                left = False
+                right = False
+                animCount = 0
         if event.type == pygame.KEYUP:
+            step_sound.stop()
             player.move = False
             if event.key in [pygame.K_LEFT, pygame.K_RIGHT]:
                 player.vx = 0
             elif event.key in [pygame.K_UP, pygame.K_DOWN]:
                 player.vy = 0
 
+    all_sprites.update(dt)
     player.update()
+    player.update_time_dependent(dt)
+    player.update_frame_dependent()
+    player.draw()
     black_l.update()
     all_sprites.update()
     screen.fill('Blue')
@@ -370,7 +467,7 @@ while running:
         counter += 1
     blit_text(screen, displayed_text, (490, 450), pygame.font.Font(None, 36))
 
-    clock.tick(30)
+    clock.tick(FPS)
     pygame.display.flip()
 
 pygame.quit()
