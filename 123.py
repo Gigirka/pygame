@@ -129,13 +129,18 @@ def load_level(filename):
 
 level = load_level('map0.txt')
 
+blocks = []
+for i in range(100, 130):
+    blocks.append(pygame.transform.scale(load_image(f'blocks/image_part_{i}.png'), (50, 50)))
+
 tile_images = {
     'wall': pygame.transform.scale(load_image('winter_wall.png'), (50, 50)),
     'empty': pygame.transform.scale(load_image('snow1.png'), (90, 90)),
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
+    'block_door': blocks
 }
-player_size = 70, 70
+player_size = 60, 60
 walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (player_size)),
             pygame.transform.scale(load_image('hero_left/4.png'), (player_size)),
             pygame.transform.scale(load_image('hero_left/3.png'), (player_size)),
@@ -148,7 +153,7 @@ walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (player_size
              pygame.transform.scale(load_image('hero_right/4.png'), (player_size)),
              pygame.transform.scale(load_image('hero_right/5.png'), (player_size))]
 
-hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (40, 40))]
+hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (33, 33))]
 
 enemy_size = 280, 280
 enemyAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_008.png'), (enemy_size)),
@@ -172,6 +177,7 @@ enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_009.png'), (enemy_size)),
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (enemy_size))]
 
+
 tile_width = tile_height = 50
 
 
@@ -184,11 +190,40 @@ class DecorCreate(pygame.sprite.Sprite):  # Класс для создания �
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
+    def __init__(self, tile_type, pos_x, pos_y, anim, str_key):
         super().__init__(tiles_group, all_sprites)
-        self.image = tile_images[tile_type]
-        self.rect = self.image.get_rect().move(
-            tile_width * pos_x, tile_height * pos_y)
+        self.anim_work = anim
+        self.str_key = str_key
+        if self.anim_work:
+            self.anim_work = True
+            self.images = blocks
+            self.index = 0
+            self.image = pygame.transform.scale(blocks[self.index],
+                                                (90, 90))  # 'image' is the current image of the animation.
+            self.rect = self.image.get_rect().move(
+                tile_width * pos_x + 15, tile_height * pos_y)
+
+            self.animation_time = 0.05
+            self.current_time = 0
+
+            self.animation_frames = 6
+            self.current_frame = 0
+
+        else:
+            self.image = tile_images[tile_type]
+            self.rect = self.image.get_rect().move(
+                tile_width * pos_x, tile_height * pos_y)
+
+    def update(self, dt):
+        if self.anim_work:
+            self.current_time += dt
+            if self.current_time >= self.animation_time:
+                self.current_time = 0
+                self.index = (self.index + 1) % len(self.images)
+                self.image = self.images[self.index]
+        else:
+            self.image = tile_images['empty']
+
 
 
 class Black(pygame.sprite.Sprite):
@@ -205,12 +240,11 @@ class Black(pygame.sprite.Sprite):
 
 
 class BlockTile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
+    def __init__(self, tile_type, pos_x, pos_y):  # str_key нужен для привязки двери к определенному врагу
         super().__init__(block_tiles_group, all_sprites)
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
-
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -228,7 +262,7 @@ class Player(pygame.sprite.Sprite):
         self.images_stop = [images[-1]]
         self.index = 0
         self.image = pygame.transform.scale(images[self.index],
-                                            (50, 50))  # 'image' is the current image of the animation.
+                                            (30, 30))  # 'image' is the current image of the animation.
         self.rect = self.image.get_rect().move(
             tile_width * pos_x + 15, tile_height * pos_y)
 
@@ -326,7 +360,11 @@ class Player(pygame.sprite.Sprite):
 
                     for sprite in enemy_group:
                         sprite.rect.x -= self.vx
-                collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+                collision_sprites = [
+                    sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                    if sprite.anim_work
+                ]
+                collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
                 for sprite in collision_sprites:
                     if sprite != self:
                         for sprite in tiles_group:
@@ -370,7 +408,11 @@ class Player(pygame.sprite.Sprite):
                         sprite.rect.y -= self.vy
 
                 # Проверка на столкновение с препятствиями
-                collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+                collision_sprites = [
+                    sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                    if sprite.anim_work
+                ]
+                collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
                 for sprite in collision_sprites:
                     if sprite != self:
                         for sprite in tiles_group:
@@ -384,7 +426,11 @@ class Player(pygame.sprite.Sprite):
 
                         for sprite in enemy_group:
                             sprite.rect.y += self.vy
-            collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+            collision_sprites = [
+                sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                if sprite.anim_work
+            ]
+            collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
             for sprite in collision_sprites:
                 if sprite != self:
                     self.rect.x = old_x
@@ -392,10 +438,11 @@ class Player(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y):
+    def __init__(self, pos_x, pos_y, str_key): #str_key - массив с координатами нужных дверей
         super().__init__(enemy_group, all_sprites)
         # self.vy = 0
         # self.vx = 0
+        self.str_key_block = str_key
         self.move = False
         self.health = 100
         self.can_attack = False
@@ -475,6 +522,11 @@ class Enemy(pygame.sprite.Sprite):
             self.can_attack = True
         else:
             self.can_attack = False
+        if self.health == 0:
+            for x_y_key in self.str_key_block:
+                for block in tiles_group:
+                    if block.str_key == str(x_y_key):
+                        block.anim_work = False
 
 
 
@@ -487,8 +539,8 @@ tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
 black_l = Black(0, 0)
-enemy1 = Enemy(220, 300)
-enemy2 = Enemy(340, 70)
+enemy1 = Enemy(220, 300, (134, 135))
+enemy2 = Enemy(480, 110, (1342, 1352))
 bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
 big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (1, 6), (16, 4), (-0.3, 2), (0, 3)]  # Массив с координатами деревьев
@@ -519,20 +571,21 @@ def generate_level(level):
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
-                Tile('empty', x, y)
+                Tile('empty', x, y, False, '')
             if level[y][x] == '!':
-                Tile('empty', x, y)
-                Tile('tree', x, y)
+                Tile('empty', x, y, False, '')
+                Tile('tree', x, y, False, '')
             if level[y][x] == '1':
-                Tile('empty', x, y)
-                Tile('tree1', x, y)
+                Tile('empty', x, y, False, '')
+                Tile('tree1', x, y, False, '')
             elif level[y][x] == '#':
                 BlockTile('wall', x, y)
             elif level[y][x] == '@':
-                Tile('empty', x, y)
+                Tile('empty', x, y, False, '')
                 new_player = Player(x, y)
             elif level[y][x] == '$':
-                Tile('empty', x, y)
+                Tile('empty', x, y, True, (str(x) + str(y)))
+                print(str(x) + str(y)) #Узнать ключ для каждой двери
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -599,8 +652,9 @@ while running:
     player.update_frame_dependent()
     black_l.update()
     all_sprites.update()
-    screen.fill('Blue')
-
+    screen.fill('Black')
+    for block in tiles_group:
+        block.update(dt)
     all_sprites.draw(screen)
     tiles_group.draw(screen)
     block_tiles_group.draw(screen)
