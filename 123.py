@@ -593,6 +593,7 @@ while running:
         enemy_class.draw(screen)
         enemy_class.update_time_dependent(dt)
         enemy_class.update_frame_dependent()
+
     player.update()
     player.update_time_dependent(dt)
     player.update_frame_dependent()
@@ -605,8 +606,10 @@ while running:
     block_tiles_group.draw(screen)
     enemy_group.draw(screen)
     decor_group.draw(screen)
+
     for enemy_class in enemy_group: #Действие для каждого врага
         enemy_class.draw(screen)
+
     player_group.draw(screen)
     player.draw(screen)
     screen.blit(sign_image, sign_rect)
