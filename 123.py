@@ -130,7 +130,7 @@ def load_level(filename):
 level = load_level('map0.txt')
 
 blocks = []
-for i in range(100, 130):
+for i in range(100, 107):
     blocks.append(pygame.transform.scale(load_image(f'blocks/image_part_{i}.png'), (50, 50)))
 
 tile_images = {
@@ -556,7 +556,7 @@ enemy1 = Enemy(480, 110, (134, 135))
 enemy2 = Enemy(1100, 160, (255, 256))
 bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
-big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (-0.3, 2), (0, 3),
+big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3),  (-0.3, 2), (0, 3),
              (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
 for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
