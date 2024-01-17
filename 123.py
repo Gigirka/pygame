@@ -272,6 +272,10 @@ class Player(pygame.sprite.Sprite):
         self.animation_frames = 6
         self.current_frame = 0
 
+    def attack(self):
+        enemies = pygame.sprite.spritecollide(self, enemy_group, False)
+        for enemy in enemies:
+            enemy.health -= 5
     def update_time_dependent(self, dt):
         """
         Updates the image of Sprite approximately every 0.1 second.
@@ -332,10 +336,10 @@ class Player(pygame.sprite.Sprite):
             old_x = self.rect.x
             old_y = self.rect.y
 
-            if self.rect.x + self.vx <= width - width // 5 and self.rect.x + self.vx >= width // 5:  # Движение "внутри рамки" по горизонтали
+            if self.rect.x + self.vx <= width - width // 3 and self.rect.x + self.vx >= width // 3:  # Движение "внутри рамки" по горизонтали
                 self.rect.x += self.vx
             else:  # Если персонаж "выходит за рамку" по горизонтали
-                if self.rect.x + self.vx < width // 5:  # Движение налево
+                if self.rect.x + self.vx < width // 3:  # Движение налево
                     for sprite in tiles_group:
                         sprite.rect.x -= self.vx
 
@@ -348,7 +352,7 @@ class Player(pygame.sprite.Sprite):
                     for sprite in enemy_group:
                         sprite.rect.x -= self.vx
 
-                if self.rect.x + self.vx > width - width // 5:  # Движение направо
+                if self.rect.x + self.vx > width - width // 3:  # Движение направо
                     for sprite in tiles_group:
                         sprite.rect.x -= self.vx
 
@@ -442,6 +446,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(enemy_group, all_sprites)
         # self.vy = 0
         # self.vx = 0
+        self.make_check = True  # проверять ли двери после смерти (для оптимизации)
         self.str_key_block = str_key
         self.move = False
         self.health = 100
@@ -517,16 +522,24 @@ class Enemy(pygame.sprite.Sprite):
         pass
 
     def update(self):
+        k = 0
         self.timee = pygame.time.get_ticks()
         if self.timee - self.last_attack_time >= 1000:
             self.can_attack = True
         else:
             self.can_attack = False
-        if self.health == 0:
+        if self.health == 0 and self.make_check:
             for x_y_key in self.str_key_block:
                 for block in tiles_group:
-                    if block.str_key == str(x_y_key):
-                        block.anim_work = False
+                    if block.anim_work == True:
+                        if block.str_key == str(x_y_key):
+                            block.anim_work = False
+                            k += 1
+
+        if k == 2: #если обе двери уничтожены, больше не проверять их наличие
+            self.make_check = False
+        if self.health == 0:
+            self.kill()
 
 
 
@@ -539,11 +552,12 @@ tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
 black_l = Black(0, 0)
-enemy1 = Enemy(220, 300, (134, 135))
-enemy2 = Enemy(480, 110, (1342, 1352))
+enemy1 = Enemy(480, 110, (134, 135))
+enemy2 = Enemy(1100, 160, (255, 256))
 bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
-big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (1, 6), (16, 4), (-0.3, 2), (0, 3)]  # Массив с координатами деревьев
+big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (-0.3, 2), (0, 3),
+             (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
 for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
 
@@ -612,6 +626,8 @@ while running:
         if event.type == pygame.KEYDOWN:
             step_sound.play(-1)
             player.move = True
+            if event.key == pygame.K_s:
+                player.attack()
             if event.key == pygame.K_LEFT:
                 player.vx = -8
                 left = True

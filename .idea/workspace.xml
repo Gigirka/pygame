@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Шкала здоровья у врагов, небольшое изменение стартовой локации">
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/map0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map0.txt" afterDir="false" />
@@ -149,7 +149,23 @@
       <option name="project" value="LOCAL" />
       <updated>1705504869914</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+      <option name="closed" value="true" />
+      <created>1705513078906</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1705513078906</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+      <option name="closed" value="true" />
+      <created>1705513088893</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1705513088893</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -170,6 +186,7 @@
     <MESSAGE value="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные" />
     <MESSAGE value="Шкала здоровья у врагов" />
     <MESSAGE value="Шкала здоровья у врагов, небольшое изменение стартовой локации" />
-    <option name="LAST_COMMIT_MESSAGE" value="Шкала здоровья у врагов, небольшое изменение стартовой локации" />
+    <MESSAGE value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
+    <option name="LAST_COMMIT_MESSAGE" value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
   </component>
 </project>
