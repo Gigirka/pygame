@@ -279,11 +279,19 @@ class Player(pygame.sprite.Sprite):
 
         # self.rect.move_ip(*self.velocity)
 
-    def draw(self):
-        self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
-        pygame.draw.rect(screen, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))  # NEW
-        pygame.draw.rect(screen, (0, 128, 0),
-                         (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))  # NEW
+    def draw(self, surf):
+        if self.health < 0:
+            self.health = 0
+        BAR_LENGTH_1 = 100
+        BAR_HEIGHT_1 = 15
+        fill_1 = (self.health / 100) * BAR_LENGTH_1
+        outline_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, BAR_LENGTH_1, BAR_HEIGHT_1)
+        fill_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, fill_1, BAR_HEIGHT_1)
+        if self.health >= 70:
+            pygame.draw.rect(surf, 'green', fill_rect_1)
+        else:
+            pygame.draw.rect(surf, 'red', fill_rect_1)
+        pygame.draw.rect(surf, 'white', outline_rect_1, 2)
 
     def update(self):
         if self.move:
@@ -446,16 +454,10 @@ class Enemy(pygame.sprite.Sprite):
     def update_frame_dependent(self):
         pass
 
-    def draw(self):
-        self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
-        pygame.draw.rect(screen, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))  # NEW
-        pygame.draw.rect(screen, (0, 128, 0),
-                         (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))  # NEW
-
     def update(self):
         self.timee = pygame.time.get_ticks()
         print(self.timee, self.last_attack_time, self.can_attack, player.health)
-        if self.timee - self.last_attack_time >= 2000:
+        if self.timee - self.last_attack_time >= 1000:
             self.can_attack = True
         else:
             self.can_attack = False
@@ -471,8 +473,8 @@ tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
 black_l = Black(0, 0)
-enemy1 = Enemy(220, 380)
-enemy2 = Enemy(340, 380)
+enemy1 = Enemy(220, 300)
+enemy2 = Enemy(340, 70)
 bonfire = DecorCreate(4, 2, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
 big_trees = [(0, 1), (6, 0), (1, 6), (16, 4)]  # Массив с координатами деревьев
@@ -527,7 +529,6 @@ player, level_x, level_y = generate_level(load_level('map0.txt'))
 all_sprites = pygame.sprite.Group()
 running = True
 clock = pygame.time.Clock()
-player.draw()
 sign_image = pygame.transform.scale(load_image('sign.png'), (450, 120))
 sign_rect = sign_image.get_rect(center=(700, 500))
 
@@ -580,7 +581,6 @@ while running:
     player.update()
     player.update_time_dependent(dt)
     player.update_frame_dependent()
-    player.draw()
     black_l.update()
     all_sprites.update()
     screen.fill('Blue')
@@ -591,6 +591,7 @@ while running:
     enemy_group.draw(screen)
     decor_group.draw(screen)
     player_group.draw(screen)
+    player.draw(screen)
     screen.blit(sign_image, sign_rect)
     if counter < len(text):
         displayed_text += text[counter]
