@@ -196,7 +196,7 @@ class Player(pygame.sprite.Sprite):
         self.vy = 0
         self.vx = 0
         self.move = False
-        self.health = 10
+        self.health = 100
         # size = (32, 32)  # This should match the size of the images.
         images = walkLeft + walkRight + hero_Stand
         # self.rect = pygame.Rect(position, size)
@@ -236,8 +236,6 @@ class Player(pygame.sprite.Sprite):
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
 
-        # self.rect.move_ip(*self.velocity)
-
     def update_frame_dependent(self):
         """
         Updates the image of Sprite every 6 frame (approximately every 0.1 second if frame rate is 60).
@@ -255,13 +253,16 @@ class Player(pygame.sprite.Sprite):
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
 
-        # self.rect.move_ip(*self.velocity)
-
-    def draw(self):
-        self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
-        pygame.draw.rect(screen, (255, 0, 0), (self.hitbox[0], self.hitbox[1] - 20, 50, 10))  # NEW
-        pygame.draw.rect(screen, (0, 128, 0),
-                         (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))  # NEW
+    def draw(self, surf):
+        if self.health < 0:
+            self.health = 0
+        BAR_LENGTH_1 = 100
+        BAR_HEIGHT_1 = 15
+        fill_1 = (self.health / 100) * BAR_LENGTH_1
+        outline_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, BAR_LENGTH_1, BAR_HEIGHT_1)
+        fill_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, fill_1, BAR_HEIGHT_1)
+        pygame.draw.rect(surf, 'green', fill_rect_1)
+        pygame.draw.rect(surf, 'white', outline_rect_1, 2)
 
     def update(self):
         if self.move:
@@ -402,10 +403,8 @@ player, level_x, level_y = generate_level(load_level('map0.txt'))
 all_sprites = pygame.sprite.Group()
 running = True
 clock = pygame.time.Clock()
-player.draw()
 sign_image = pygame.transform.scale(load_image('sign.png'), (450, 120))
 sign_rect = sign_image.get_rect(center=(700, 500))
-
 text = ("""Привет, незнакомец! Ты попал 
 в лабиринт, который находится 
 вне времени и пространства...""")
@@ -451,7 +450,6 @@ while running:
     player.update()
     player.update_time_dependent(dt)
     player.update_frame_dependent()
-    player.draw()
     black_l.update()
     all_sprites.update()
     screen.fill('Blue')
@@ -461,6 +459,7 @@ while running:
     block_tiles_group.draw(screen)
     decor_group.draw(screen)
     player_group.draw(screen)
+    player.draw(screen)
     screen.blit(sign_image, sign_rect)
     if counter < len(text):
         displayed_text += text[counter]
