@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Враги и их анимации (c уроном игроку)" />
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map0.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,7 +125,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705488448981</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные">
+      <option name="closed" value="true" />
+      <created>1705489257123</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1705489257123</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -139,6 +151,7 @@
     <MESSAGE value="Соединил первый уровень + заставку" />
     <MESSAGE value="Враги и их анимации (без урона игроку)" />
     <MESSAGE value="Враги и их анимации (c уроном игроку)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Враги и их анимации (c уроном игроку)" />
+    <MESSAGE value="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные" />
+    <option name="LAST_COMMIT_MESSAGE" value="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные" />
   </component>
 </project>

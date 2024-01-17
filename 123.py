@@ -451,12 +451,26 @@ class Enemy(pygame.sprite.Sprite):
 
         # self.rect.move_ip(*self.velocity)
 
+    def draw(self, surf):
+        if self.health < 0:
+            self.health = 0
+        BAR_LENGTH_1 = 100
+        BAR_HEIGHT_1 = 15
+        fill_1 = (self.health / 100) * BAR_LENGTH_1
+        outline_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, BAR_LENGTH_1, BAR_HEIGHT_1)
+        fill_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, fill_1, BAR_HEIGHT_1)
+        if self.health >= 70:
+            pygame.draw.rect(surf, 'green', fill_rect_1)
+        else:
+            pygame.draw.rect(surf, 'red', fill_rect_1)
+        pygame.draw.rect(surf, 'white', outline_rect_1, 2)
+
+
     def update_frame_dependent(self):
         pass
 
     def update(self):
         self.timee = pygame.time.get_ticks()
-        print(self.timee, self.last_attack_time, self.can_attack, player.health)
         if self.timee - self.last_attack_time >= 1000:
             self.can_attack = True
         else:
@@ -475,9 +489,9 @@ block_tiles_group = pygame.sprite.Group()
 black_l = Black(0, 0)
 enemy1 = Enemy(220, 300)
 enemy2 = Enemy(340, 70)
-bonfire = DecorCreate(4, 2, 'bonfire.png', (80, 80))
+bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
-big_trees = [(0, 1), (6, 0), (1, 6), (16, 4)]  # Массив с координатами деревьев
+big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (1, 6), (16, 4), (-0.3, 2), (0, 3)]  # Массив с координатами деревьев
 for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
 
@@ -574,8 +588,9 @@ while running:
                 player.vy = 0
 
     all_sprites.update(dt)
-    for enemy_class in enemy_group:
+    for enemy_class in enemy_group: #Действие для каждого врага
         enemy_class.update()
+        enemy_class.draw(screen)
         enemy_class.update_time_dependent(dt)
         enemy_class.update_frame_dependent()
     player.update()
@@ -590,6 +605,8 @@ while running:
     block_tiles_group.draw(screen)
     enemy_group.draw(screen)
     decor_group.draw(screen)
+    for enemy_class in enemy_group: #Действие для каждого врага
+        enemy_class.draw(screen)
     player_group.draw(screen)
     player.draw(screen)
     screen.blit(sign_image, sign_rect)
