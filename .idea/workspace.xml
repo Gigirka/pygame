@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Враги и их анимации (c уроном игроку)" />
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map0.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,15 +47,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.123.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main-Ivan&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/mrtob/PycharmProjects/pygame1/data&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.123.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/mrtob/PycharmProjects/pygame1/data"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\mrtob\PycharmProjects\pygame1\data" />
@@ -121,7 +125,47 @@
       <option name="project" value="LOCAL" />
       <updated>1705488448981</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные">
+      <option name="closed" value="true" />
+      <created>1705489257123</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1705489257123</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Шкала здоровья у врагов">
+      <option name="closed" value="true" />
+      <created>1705504813872</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1705504813872</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Шкала здоровья у врагов, небольшое изменение стартовой локации">
+      <option name="closed" value="true" />
+      <created>1705504869914</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1705504869914</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+      <option name="closed" value="true" />
+      <created>1705513078906</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1705513078906</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+      <option name="closed" value="true" />
+      <created>1705513088893</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1705513088893</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -139,6 +183,10 @@
     <MESSAGE value="Соединил первый уровень + заставку" />
     <MESSAGE value="Враги и их анимации (без урона игроку)" />
     <MESSAGE value="Враги и их анимации (c уроном игроку)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Враги и их анимации (c уроном игроку)" />
+    <MESSAGE value="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные" />
+    <MESSAGE value="Шкала здоровья у врагов" />
+    <MESSAGE value="Шкала здоровья у врагов, небольшое изменение стартовой локации" />
+    <MESSAGE value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
+    <option name="LAST_COMMIT_MESSAGE" value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
   </component>
 </project>
