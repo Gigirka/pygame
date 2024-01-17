@@ -4,10 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Соединил первый уровень + заставку">
-      <change afterPath="$PROJECT_DIR$/data/map1.txt" afterDir="false" />
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Враги и их анимации (без урона игроку)">
+      <change beforePath="$PROJECT_DIR$/.idea/pygame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pygame.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/Sprites/Attack3.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/Sprites/Attack3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/Sprites/Idle.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/Sprites/Idle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_001.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_001.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_002.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_002.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_003.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_003.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_004.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_004.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_005.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_005.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_006.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_006.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_007.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_007.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_008.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_008.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/attack/image_part_009.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_001.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_001.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_002.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_002.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_003.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_003.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_004.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_004.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_005.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_005.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_006.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_006.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_007.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_007.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_008.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_008.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_009.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_009.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_010.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Fantasy Warrior/idle/image_part_010.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/map0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map0.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,15 +69,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.123.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main-Ivan",
-    "last_opened_file_path": "C:/Users/mrtob/PycharmProjects/pygame1/data"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.123.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main-Ivan&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mrtob/PycharmProjects/pygame1/data&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\mrtob\PycharmProjects\pygame1\data" />
@@ -65,7 +86,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-67fca87a943a-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.11799.259" />
+        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
       </set>
     </attachedChunks>
   </component>
@@ -94,7 +115,23 @@
       <option name="project" value="LOCAL" />
       <updated>1703503514903</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Враги и их анимации (без урона игроку)">
+      <option name="closed" value="true" />
+      <created>1705420870884</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1705420870884</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Враги и их анимации (без урона игроку)">
+      <option name="closed" value="true" />
+      <created>1705420900209</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1705420900209</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -110,6 +147,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Соединил первый уровень + заставку" />
-    <option name="LAST_COMMIT_MESSAGE" value="Соединил первый уровень + заставку" />
+    <MESSAGE value="Враги и их анимации (без урона игроку)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Враги и их анимации (без урона игроку)" />
   </component>
 </project>

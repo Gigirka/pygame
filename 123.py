@@ -151,15 +151,15 @@ walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (player_size
 hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (40, 40))]
 
 enemy_size = 280, 280
-enemyAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_001.png'), (enemy_size)),
-               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_002.png'), (enemy_size)),
-               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_003.png'), (enemy_size)),
-               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004.png'), (enemy_size)),
-               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_005.png'), (enemy_size)),
-               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_006.png'), (enemy_size)),
+enemyAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_008.png'), (enemy_size)),
                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_007.png'), (enemy_size)),
-               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_008.png'), (enemy_size)),
-               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_009.png'), (enemy_size))]
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_006.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_005.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004.png'), (enemy_size)),
+                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004 (1).png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_003.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_002.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_001.png'), (enemy_size))]
 
 enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_001.png'), (enemy_size)),
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_002.png'), (enemy_size)),
@@ -218,7 +218,7 @@ class Player(pygame.sprite.Sprite):
         self.vy = 0
         self.vx = 0
         self.move = False
-        self.health = 10
+        self.health = 100
         # size = (32, 32)  # This should match the size of the images.
         images = walkLeft + walkRight + hero_Stand
         # self.rect = pygame.Rect(position, size)
@@ -389,7 +389,8 @@ class Enemy(pygame.sprite.Sprite):
         # self.vy = 0
         # self.vx = 0
         self.move = False
-        self.health = 10
+        self.health = 100
+        self.can_attack = False
         # size = (32, 32)  # This should match the size of the images.
         images = enemyAttack + enemyStand
         self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
@@ -420,10 +421,14 @@ class Enemy(pygame.sprite.Sprite):
         Args:
             dt: Time elapsed between each frame.
         """
-        self.timee += 1
+
         if self.rect.colliderect(player.rect):
-            self.images = self.images_attack
-            self.last_attack_time = self.timee
+            # Check if it has been at least 5 seconds since the last attack
+            if self.can_attack:
+                self.images = self.images_attack
+
+            else:
+                self.images = self.images_idle
         else:
             self.images = self.images_idle
 
@@ -432,32 +437,14 @@ class Enemy(pygame.sprite.Sprite):
             self.current_time = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
+            if self.image == self.images_attack[0]:
+                self.last_attack_time = self.timee
+                player.health -= 10
 
         # self.rect.move_ip(*self.velocity)
 
     def update_frame_dependent(self):
-        """
-        Updates the image of Sprite every 6 frame (approximately every 0.1 second if frame rate is 60).
-        """
-        if self.rect.colliderect(player.rect):
-            self.images = self.images_attack
-        else:
-            self.images = self.images_idle
-
-        self.current_frame += 1
-        if self.current_frame >= self.animation_frames:
-            self.current_frame = 0
-            self.index = (self.index + 1) % len(self.images)
-            self.image = self.images[self.index]
-
-        if self.current_time - self.last_attack_time >= 5000:
-            # It has been 5 seconds, so attack
-            self.images = self.images_attack
-        else:
-            # It hasn't been 5 seconds yet, so idle
-            self.images = self.images_idle
-
-        # self.rect.move_ip(*self.velocity)
+        pass
 
     def draw(self):
         self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
@@ -466,7 +453,14 @@ class Enemy(pygame.sprite.Sprite):
                          (self.hitbox[0], self.hitbox[1] - 20, 50 - (5 * (10 - self.health)), 10))  # NEW
 
     def update(self):
-        pass
+        self.timee = pygame.time.get_ticks()
+        print(self.timee, self.last_attack_time, self.can_attack, player.health)
+        if self.timee - self.last_attack_time >= 2000:
+            self.can_attack = True
+        else:
+            self.can_attack = False
+
+
 
 
 player = None
