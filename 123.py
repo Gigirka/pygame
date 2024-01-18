@@ -161,7 +161,7 @@ enemyAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_p
                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_006.png'), (enemy_size)),
                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_005.png'), (enemy_size)),
                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004.png'), (enemy_size)),
-                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004 (1).png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004 (1).png'), (enemy_size)),
                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_003.png'), (enemy_size)),
                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_002.png'), (enemy_size)),
                pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_001.png'), (enemy_size))]
@@ -176,7 +176,6 @@ enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_008.png'), (enemy_size)),
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_009.png'), (enemy_size)),
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (enemy_size))]
-
 
 tile_width = tile_height = 50
 
@@ -225,7 +224,6 @@ class Tile(pygame.sprite.Sprite):
             self.image = tile_images['empty']
 
 
-
 class Black(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
@@ -245,6 +243,21 @@ class BlockTile(pygame.sprite.Sprite):
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+
+
+class HealingApple(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, file_name, size):
+        super().__init__(healing_apples_group, all_sprites)
+        self.image = pygame.transform.scale(load_image(file_name), (size))  # Adjust the size as needed
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x, tile_height * pos_y)
+
+    def heal(self):
+        if self.rect.colliderect(player.rect):
+            self.kill()
+            player.health = 5
+
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -276,6 +289,7 @@ class Player(pygame.sprite.Sprite):
         enemies = pygame.sprite.spritecollide(self, enemy_group, False)
         for enemy in enemies:
             enemy.health -= 5
+
     def update_time_dependent(self, dt):
         """
         Updates the image of Sprite approximately every 0.1 second.
@@ -442,7 +456,7 @@ class Player(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, str_key): #str_key - массив с координатами нужных дверей
+    def __init__(self, pos_x, pos_y, str_key):  # str_key - массив с координатами нужных дверей
         super().__init__(enemy_group, all_sprites)
         # self.vy = 0
         # self.vx = 0
@@ -517,7 +531,6 @@ class Enemy(pygame.sprite.Sprite):
             pygame.draw.rect(surf, 'red', fill_rect_1)
         pygame.draw.rect(surf, 'white', outline_rect_1, 2)
 
-
     def update_frame_dependent(self):
         pass
 
@@ -536,12 +549,10 @@ class Enemy(pygame.sprite.Sprite):
                             block.anim_work = False
                             k += 1
 
-        if k == 2: #если обе двери уничтожены, больше не проверять их наличие
+        if k == 2:  # если обе двери уничтожены, больше не проверять их наличие
             self.make_check = False
         if self.health == 0:
             self.kill()
-
-
 
 
 player = None
@@ -551,13 +562,15 @@ all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
+healing_apples_group = pygame.sprite.Group()
 black_l = Black(0, 0)
 enemy1 = Enemy(480, 110, (134, 135))
 enemy2 = Enemy(1100, 160, (255, 256))
 bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
-big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3),  (-0.3, 2), (0, 3),
+big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
              (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
+apple = HealingApple(7, 5, 'apple.png', (70, 40))
 for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
 
@@ -599,7 +612,7 @@ def generate_level(level):
                 new_player = Player(x, y)
             elif level[y][x] == '$':
                 Tile('empty', x, y, True, (str(x) + str(y)))
-                print(str(x) + str(y)) #Узнать ключ для каждой двери
+                print(str(x) + str(y))  # Узнать ключ для каждой двери
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -657,7 +670,7 @@ while running:
                 player.vy = 0
 
     all_sprites.update(dt)
-    for enemy_class in enemy_group: #Действие для каждого врага
+    for enemy_class in enemy_group:  # Действие для каждого врага
         enemy_class.update()
         enemy_class.draw(screen)
         enemy_class.update_time_dependent(dt)
@@ -676,8 +689,9 @@ while running:
     block_tiles_group.draw(screen)
     enemy_group.draw(screen)
     decor_group.draw(screen)
+    healing_apples_group.draw(screen)
 
-    for enemy_class in enemy_group: #Действие для каждого врага
+    for enemy_class in enemy_group:  # Действие для каждого врага
         enemy_class.draw(screen)
 
     player_group.draw(screen)
