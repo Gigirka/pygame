@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="main-Ivan" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="6f656f0ed2fc986da7857df4b5b32361587c77ad" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MrTObin226&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="e66daac3-2ab5-4e7d-9cde-6287f742f16c" />
+        <option name="url" value="https://github.com/Gigirka/pygame.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2a23sjxLObhBSw9vTAUZsYpCEbp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.123.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/mrtob/PycharmProjects/pygame1/data"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mrtob\PycharmProjects\pygame1\data" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-7a29c1521ef0-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.11799.298" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="" />
+      <created>1703503054861</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1703503054861</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Соединил первый уровень + заставку">
+      <option name="closed" value="true" />
+      <created>1703503498210</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1703503498210</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Соединил первый уровень + заставку">
+      <option name="closed" value="true" />
+      <created>1703503514903</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1703503514903</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Враги и их анимации (без урона игроку)">
+      <option name="closed" value="true" />
+      <created>1705420870884</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1705420870884</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Враги и их анимации (без урона игроку)">
+      <option name="closed" value="true" />
+      <created>1705420900209</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1705420900209</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Враги и их анимации (c уроном игроку)">
+      <option name="closed" value="true" />
+      <created>1705488441191</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1705488441191</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Враги и их анимации (c уроном игроку)">
+      <option name="closed" value="true" />
+      <created>1705488448981</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1705488448981</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные">
+      <option name="closed" value="true" />
+      <created>1705489257123</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1705489257123</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Шкала здоровья у врагов">
+      <option name="closed" value="true" />
+      <created>1705504813872</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1705504813872</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Шкала здоровья у врагов, небольшое изменение стартовой локации">
+      <option name="closed" value="true" />
+      <created>1705504869914</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1705504869914</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+      <option name="closed" value="true" />
+      <created>1705513078906</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1705513078906</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+      <option name="closed" value="true" />
+      <created>1705513088893</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1705513088893</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Небольшое изменение локации + удалил ненужные картинки из data">
+      <option name="closed" value="true" />
+      <created>1705520357892</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1705520357892</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Соединил первый уровень + заставку" />
+    <MESSAGE value="Враги и их анимации (без урона игроку)" />
+    <MESSAGE value="Враги и их анимации (c уроном игроку)" />
+    <MESSAGE value="Теперь враги наносят урон&#10;Если здоровье игрока больше 70, то хп зелёные, если меньше - то красные" />
+    <MESSAGE value="Шкала здоровья у врагов" />
+    <MESSAGE value="Шкала здоровья у врагов, небольшое изменение стартовой локации" />
+    <MESSAGE value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
+    <MESSAGE value="Небольшое изменение локации + удалил ненужные картинки из data" />
+    <MESSAGE value="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
+    <option name="LAST_COMMIT_MESSAGE" value="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
+  </component>
+</project>

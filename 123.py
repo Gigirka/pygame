@@ -129,26 +129,53 @@ def load_level(filename):
 
 level = load_level('map0.txt')
 
+blocks = []
+for i in range(100, 107):
+    blocks.append(pygame.transform.scale(load_image(f'blocks/image_part_{i}.png'), (50, 50)))
+
 tile_images = {
     'wall': pygame.transform.scale(load_image('winter_wall.png'), (50, 50)),
     'empty': pygame.transform.scale(load_image('snow1.png'), (90, 90)),
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
+    'block_door': blocks
 }
+player_size = 60, 60
+walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/4.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/3.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/2.png'), (player_size)),
+            pygame.transform.scale(load_image('hero_left/1.png'), (player_size))]
 
-walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/4.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/3.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/2.png'), (80, 80)),
-            pygame.transform.scale(load_image('hero_left/1.png'), (80, 80))]
+walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/2.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/3.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/4.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_right/5.png'), (player_size))]
 
-walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/2.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/3.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/4.png'), (80, 80)),
-             pygame.transform.scale(load_image('hero_right/5.png'), (80, 80))]
+hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (33, 33))]
 
-hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (50, 50))]
+enemy_size = 280, 280
+enemyAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_008.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_007.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_006.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_005.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004 (1).png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_003.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_002.png'), (enemy_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_001.png'), (enemy_size))]
+
+enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_001.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_002.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_003.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_004.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_005.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_006.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_007.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_008.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_009.png'), (enemy_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (enemy_size))]
 
 tile_width = tile_height = 50
 
@@ -162,11 +189,39 @@ class DecorCreate(pygame.sprite.Sprite):  # Класс для создания �
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
+    def __init__(self, tile_type, pos_x, pos_y, anim, str_key):
         super().__init__(tiles_group, all_sprites)
-        self.image = tile_images[tile_type]
-        self.rect = self.image.get_rect().move(
-            tile_width * pos_x, tile_height * pos_y)
+        self.anim_work = anim
+        self.str_key = str_key
+        if self.anim_work:
+            self.anim_work = True
+            self.images = blocks
+            self.index = 0
+            self.image = pygame.transform.scale(blocks[self.index],
+                                                (90, 90))  # 'image' is the current image of the animation.
+            self.rect = self.image.get_rect().move(
+                tile_width * pos_x + 15, tile_height * pos_y)
+
+            self.animation_time = 0.05
+            self.current_time = 0
+
+            self.animation_frames = 6
+            self.current_frame = 0
+
+        else:
+            self.image = tile_images[tile_type]
+            self.rect = self.image.get_rect().move(
+                tile_width * pos_x, tile_height * pos_y)
+
+    def update(self, dt):
+        if self.anim_work:
+            self.current_time += dt
+            if self.current_time >= self.animation_time:
+                self.current_time = 0
+                self.index = (self.index + 1) % len(self.images)
+                self.image = self.images[self.index]
+        else:
+            self.image = tile_images['empty']
 
 
 class Black(pygame.sprite.Sprite):
@@ -183,11 +238,29 @@ class Black(pygame.sprite.Sprite):
 
 
 class BlockTile(pygame.sprite.Sprite):
-    def __init__(self, tile_type, pos_x, pos_y):
+    def __init__(self, tile_type, pos_x, pos_y):  # str_key нужен для привязки двери к определенному врагу
         super().__init__(block_tiles_group, all_sprites)
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+
+
+class HealingApple(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, file_name, size):
+        super().__init__(healing_apples_group, all_sprites)
+        self.image = pygame.transform.scale(load_image(file_name), (size))  # Adjust the size as needed
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x, tile_height * pos_y)
+
+    def heal(self):
+        if self.rect.colliderect(player.rect):
+            k = 0
+            while k < 30:
+                if player.health < 100:
+                    player.health += 1
+                k += 1
+            self.kill()
+
 
 
 class Player(pygame.sprite.Sprite):
@@ -206,15 +279,20 @@ class Player(pygame.sprite.Sprite):
         self.images_stop = [images[-1]]
         self.index = 0
         self.image = pygame.transform.scale(images[self.index],
-                                            (50, 50))  # 'image' is the current image of the animation.
+                                            (30, 30))  # 'image' is the current image of the animation.
         self.rect = self.image.get_rect().move(
-            tile_width * pos_x + 15, tile_height * pos_y + 5)
+            tile_width * pos_x + 15, tile_height * pos_y)
 
         self.animation_time = 0.05
         self.current_time = 0
 
         self.animation_frames = 6
         self.current_frame = 0
+
+    def attack(self):
+        enemies = pygame.sprite.spritecollide(self, enemy_group, False)
+        for enemy in enemies:
+            enemy.health -= 5
 
     def update_time_dependent(self, dt):
         """
@@ -236,6 +314,8 @@ class Player(pygame.sprite.Sprite):
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
 
+        # self.rect.move_ip(*self.velocity)
+
     def update_frame_dependent(self):
         """
         Updates the image of Sprite every 6 frame (approximately every 0.1 second if frame rate is 60).
@@ -253,6 +333,8 @@ class Player(pygame.sprite.Sprite):
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
 
+        # self.rect.move_ip(*self.velocity)
+
     def draw(self, surf):
         if self.health < 0:
             self.health = 0
@@ -261,7 +343,10 @@ class Player(pygame.sprite.Sprite):
         fill_1 = (self.health / 100) * BAR_LENGTH_1
         outline_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, BAR_LENGTH_1, BAR_HEIGHT_1)
         fill_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, fill_1, BAR_HEIGHT_1)
-        pygame.draw.rect(surf, 'green', fill_rect_1)
+        if self.health >= 50:
+            pygame.draw.rect(surf, 'green', fill_rect_1)
+        else:
+            pygame.draw.rect(surf, 'red', fill_rect_1)
         pygame.draw.rect(surf, 'white', outline_rect_1, 2)
 
     def update(self):
@@ -269,10 +354,10 @@ class Player(pygame.sprite.Sprite):
             old_x = self.rect.x
             old_y = self.rect.y
 
-            if self.rect.x + self.vx <= width - width // 6 and self.rect.x + self.vx >= width // 6:
+            if self.rect.x + self.vx <= width - width // 3 and self.rect.x + self.vx >= width // 3:  # Движение "внутри рамки" по горизонтали
                 self.rect.x += self.vx
-            else:
-                if self.rect.x + self.vx < width // 5:
+            else:  # Если персонаж "выходит за рамку" по горизонтали
+                if self.rect.x + self.vx < width // 3:  # Движение налево
                     for sprite in tiles_group:
                         sprite.rect.x -= self.vx
 
@@ -282,7 +367,13 @@ class Player(pygame.sprite.Sprite):
                     for sprite in decor_group:
                         sprite.rect.x -= self.vx
 
-                if self.rect.x + self.vx > width - width // 5:
+                    for sprite in enemy_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in healing_apples_group:
+                        sprite.rect.x -= self.vx
+
+                if self.rect.x + self.vx > width - width // 3:  # Движение направо
                     for sprite in tiles_group:
                         sprite.rect.x -= self.vx
 
@@ -291,7 +382,17 @@ class Player(pygame.sprite.Sprite):
 
                     for sprite in decor_group:
                         sprite.rect.x -= self.vx
-                collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+
+                    for sprite in enemy_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in healing_apples_group:
+                        sprite.rect.x -= self.vx
+                collision_sprites = [
+                    sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                    if sprite.anim_work
+                ]
+                collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
                 for sprite in collision_sprites:
                     if sprite != self:
                         for sprite in tiles_group:
@@ -302,10 +403,17 @@ class Player(pygame.sprite.Sprite):
 
                         for sprite in decor_group:
                             sprite.rect.x += self.vx
-            if self.rect.y + self.vy <= height - height // 6 and self.rect.y + self.vy >= height // 6:
+
+                        for sprite in enemy_group:
+                            sprite.rect.x += self.vx
+
+                        for sprite in healing_apples_group:
+                            sprite.rect.x += self.vx
+
+            if self.rect.y + self.vy <= height - height // 2 and self.rect.y + self.vy >= height // 2:  # Движение "внутри рамки" по вертикали
                 self.rect.y += self.vy
-            else:
-                if self.rect.y + self.vy < height // 5:
+            else:  # Если персонаж "выходит за рамку" по вертикали
+                if self.rect.y + self.vy < height // 2:  # Движение наверх
                     for sprite in tiles_group:
                         sprite.rect.y -= self.vy
 
@@ -315,7 +423,13 @@ class Player(pygame.sprite.Sprite):
                     for sprite in decor_group:
                         sprite.rect.y -= self.vy
 
-                if self.rect.y + self.vy > height - height // 5:
+                    for sprite in enemy_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in healing_apples_group:
+                        sprite.rect.y -= self.vy
+
+                if self.rect.y + self.vy > height - height // 3:  # Движение вниз
                     for sprite in tiles_group:
                         sprite.rect.y -= self.vy
 
@@ -323,10 +437,20 @@ class Player(pygame.sprite.Sprite):
                         sprite.rect.y -= self.vy
 
                     for sprite in decor_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in enemy_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in healing_apples_group:
                         sprite.rect.y -= self.vy
 
                 # Проверка на столкновение с препятствиями
-                collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+                collision_sprites = [
+                    sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                    if sprite.anim_work
+                ]
+                collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
                 for sprite in collision_sprites:
                     if sprite != self:
                         for sprite in tiles_group:
@@ -337,23 +461,140 @@ class Player(pygame.sprite.Sprite):
 
                         for sprite in decor_group:
                             sprite.rect.y += self.vy
-            collision_sprites = pygame.sprite.spritecollide(self, block_tiles_group, False)
+
+                        for sprite in enemy_group:
+                            sprite.rect.y += self.vy
+
+                        for sprite in healing_apples_group:
+                            sprite.rect.y += self.vy
+
+            collision_sprites = [
+                sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                if sprite.anim_work
+            ]
+            collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
             for sprite in collision_sprites:
                 if sprite != self:
                     self.rect.x = old_x
                     self.rect.y = old_y
 
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, str_key):  # str_key - массив с координатами нужных дверей
+        super().__init__(enemy_group, all_sprites)
+        # self.vy = 0
+        # self.vx = 0
+        self.make_check = True  # проверять ли двери после смерти (для оптимизации)
+        self.str_key_block = str_key
+        self.move = False
+        self.health = 100
+        self.can_attack = False
+        # size = (32, 32)  # This should match the size of the images.
+        images = enemyAttack + enemyStand
+        self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
+        self.images = images
+        self.images_attack = images[0:8]
+        self.images_idle = images[10:16]
+        self.index = 0
+        self.last_attack_time = 0
+
+        self.image = pygame.transform.scale(images[self.index],
+                                            (5, 5))  # 'image' is the current image of the animation.
+        # Переопределяем координаты коллизии
+
+        # self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
+
+        self.animation_time = 0.05
+        self.current_time = 0
+
+        self.timee = 0
+
+        self.animation_frames = 6
+        self.current_frame = 0
+
+    def update_time_dependent(self, dt):
+        """
+        Updates the image of Sprite approximately every 0.1 second.
+
+        Args:
+            dt: Time elapsed between each frame.
+        """
+
+        if self.rect.colliderect(player.rect):
+            # Check if it has been at least 5 seconds since the last attack
+            if self.can_attack:
+                self.images = self.images_attack
+
+            else:
+                self.images = self.images_idle
+        else:
+            self.images = self.images_idle
+
+        self.current_time += dt
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+            if self.image == self.images_attack[0]:
+                self.last_attack_time = self.timee
+                player.health -= 10
+
+        # self.rect.move_ip(*self.velocity)
+
+    def draw(self, surf):
+        if self.health < 0:
+            self.health = 0
+        BAR_LENGTH_1 = 100
+        BAR_HEIGHT_1 = 15
+        fill_1 = (self.health / 100) * BAR_LENGTH_1
+        outline_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, BAR_LENGTH_1, BAR_HEIGHT_1)
+        fill_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, fill_1, BAR_HEIGHT_1)
+        if self.health >= 50:
+            pygame.draw.rect(surf, 'green', fill_rect_1)
+        else:
+            pygame.draw.rect(surf, 'red', fill_rect_1)
+        pygame.draw.rect(surf, 'white', outline_rect_1, 2)
+
+    def update_frame_dependent(self):
+        pass
+
+    def update(self):
+        k = 0
+        self.timee = pygame.time.get_ticks()
+        if self.timee - self.last_attack_time >= 1000:
+            self.can_attack = True
+        else:
+            self.can_attack = False
+        if self.health == 0 and self.make_check:
+            for x_y_key in self.str_key_block:
+                for block in tiles_group:
+                    if block.anim_work == True:
+                        if block.str_key == str(x_y_key):
+                            block.anim_work = False
+                            k += 1
+
+        if k == 2:  # если обе двери уничтожены, больше не проверять их наличие
+            self.make_check = False
+        if self.health == 0:
+            self.kill()
+
+
 player = None
 decor_group = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
+healing_apples_group = pygame.sprite.Group()
 black_l = Black(0, 0)
-bonfire = DecorCreate(4, 2, 'bonfire.png', (80, 80))
+enemy1 = Enemy(480, 110, (134, 135))
+enemy2 = Enemy(1100, 160, (255, 256))
+bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
-big_trees = [(0, 1), (6, 0), (1, 6), (16, 4)]  # Массив с координатами деревьев
+big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
+             (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
+apple = HealingApple(7, 5, 'apple.png', (70, 40))
 for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
 
@@ -381,18 +622,21 @@ def generate_level(level):
     for y in range(len(level)):
         for x in range(len(level[y])):
             if level[y][x] == '.':
-                Tile('empty', x, y)
+                Tile('empty', x, y, False, '')
             if level[y][x] == '!':
-                Tile('empty', x, y)
-                Tile('tree', x, y)
+                Tile('empty', x, y, False, '')
+                Tile('tree', x, y, False, '')
             if level[y][x] == '1':
-                Tile('empty', x, y)
-                Tile('tree1', x, y)
+                Tile('empty', x, y, False, '')
+                Tile('tree1', x, y, False, '')
             elif level[y][x] == '#':
                 BlockTile('wall', x, y)
             elif level[y][x] == '@':
-                Tile('empty', x, y)
+                Tile('empty', x, y, False, '')
                 new_player = Player(x, y)
+            elif level[y][x] == '$':
+                Tile('empty', x, y, True, (str(x) + str(y)))
+                print(str(x) + str(y))  # Узнать ключ для каждой двери
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -405,6 +649,7 @@ running = True
 clock = pygame.time.Clock()
 sign_image = pygame.transform.scale(load_image('sign.png'), (450, 120))
 sign_rect = sign_image.get_rect(center=(700, 500))
+
 text = ("""Привет, незнакомец! Ты попал 
 в лабиринт, который находится 
 вне времени и пространства...""")
@@ -415,9 +660,13 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            player.attack()
         if event.type == pygame.KEYDOWN:
             step_sound.play(-1)
             player.move = True
+            if event.key == pygame.K_s:
+                player.attack()
             if event.key == pygame.K_LEFT:
                 player.vx = -8
                 left = True
@@ -447,17 +696,31 @@ while running:
                 player.vy = 0
 
     all_sprites.update(dt)
+    for enemy_class in enemy_group:  # Действие для каждого врага
+        enemy_class.update()
+        enemy_class.draw(screen)
+        enemy_class.update_time_dependent(dt)
+        enemy_class.update_frame_dependent()
+
     player.update()
     player.update_time_dependent(dt)
     player.update_frame_dependent()
     black_l.update()
     all_sprites.update()
-    screen.fill('Blue')
-
+    screen.fill('Black')
+    for block in tiles_group:
+        block.update(dt)
     all_sprites.draw(screen)
     tiles_group.draw(screen)
     block_tiles_group.draw(screen)
+    enemy_group.draw(screen)
     decor_group.draw(screen)
+    healing_apples_group.draw(screen)
+    for apple in healing_apples_group:
+        apple.heal()
+    for enemy_class in enemy_group:  # Действие для каждого врага
+        enemy_class.draw(screen)
+
     player_group.draw(screen)
     player.draw(screen)
     screen.blit(sign_image, sign_rect)
