@@ -255,7 +255,7 @@ class HealingApple(pygame.sprite.Sprite):
     def heal(self):
         if self.rect.colliderect(player.rect):
             k = 0
-            while k < 10:
+            while k < 30:
                 if player.health < 100:
                     player.health += 1
                 k += 1
@@ -343,7 +343,7 @@ class Player(pygame.sprite.Sprite):
         fill_1 = (self.health / 100) * BAR_LENGTH_1
         outline_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, BAR_LENGTH_1, BAR_HEIGHT_1)
         fill_rect_1 = pygame.Rect(self.rect.x - 45 / 2, self.rect.y - 25, fill_1, BAR_HEIGHT_1)
-        if self.health >= 70:
+        if self.health >= 50:
             pygame.draw.rect(surf, 'green', fill_rect_1)
         else:
             pygame.draw.rect(surf, 'red', fill_rect_1)
@@ -549,7 +549,7 @@ class Enemy(pygame.sprite.Sprite):
         fill_1 = (self.health / 100) * BAR_LENGTH_1
         outline_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, BAR_LENGTH_1, BAR_HEIGHT_1)
         fill_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, fill_1, BAR_HEIGHT_1)
-        if self.health >= 70:
+        if self.health >= 50:
             pygame.draw.rect(surf, 'green', fill_rect_1)
         else:
             pygame.draw.rect(surf, 'red', fill_rect_1)
@@ -660,6 +660,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            player.attack()
         if event.type == pygame.KEYDOWN:
             step_sound.play(-1)
             player.move = True

@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Небольшое изменение локации + удалил ненужные картинки из data">
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +19,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main-Ivan" />
+        <entry key="$PROJECT_DIR$" value="6f656f0ed2fc986da7857df4b5b32361587c77ad" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -62,7 +63,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
+        <option value="bundled-python-sdk-7a29c1521ef0-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.11799.298" />
       </set>
     </attachedChunks>
   </component>
@@ -179,7 +180,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -194,6 +207,7 @@
     <MESSAGE value="Шкала здоровья у врагов, небольшое изменение стартовой локации" />
     <MESSAGE value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
     <MESSAGE value="Небольшое изменение локации + удалил ненужные картинки из data" />
-    <option name="LAST_COMMIT_MESSAGE" value="Небольшое изменение локации + удалил ненужные картинки из data" />
+    <MESSAGE value="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
+    <option name="LAST_COMMIT_MESSAGE" value="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
   </component>
 </project>
