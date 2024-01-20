@@ -15,6 +15,7 @@ font = pygame.font.SysFont('Arial', 40)
 wind_sound = pygame.mixer.Sound("data/wind.ogg")
 step_sound = pygame.mixer.Sound("data/step.ogg")
 enemy_punch_sound = pygame.mixer.Sound("data/enemy_punch.ogg")
+eat_sound = pygame.mixer.Sound("data/eat.wav")
 objects = []
 
 left = False
@@ -256,6 +257,7 @@ class HealingApple(pygame.sprite.Sprite):
     def heal(self):
         if self.rect.colliderect(player.rect):
             k = 0
+            eat_sound.play()
             while k < 30:
                 if player.health < 100:
                     player.health += 1

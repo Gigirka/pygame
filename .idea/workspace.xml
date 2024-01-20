@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,6 +37,9 @@
         <option name="url" value="https://github.com/Gigirka/pygame.git" />
       </UrlAndAccount>
     </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -213,6 +219,7 @@
     <MESSAGE value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
     <MESSAGE value="Небольшое изменение локации + удалил ненужные картинки из data" />
     <MESSAGE value="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
-    <option name="LAST_COMMIT_MESSAGE" value="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
+    <MESSAGE value="Добавил врагам звук удара" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил врагам звук удара" />
   </component>
 </project>
