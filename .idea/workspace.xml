@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
-    </list>
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,7 +16,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="6f656f0ed2fc986da7857df4b5b32361587c77ad" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -51,7 +48,7 @@
     "Python.123.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "main-Maxim",
     "last_opened_file_path": "C:/Users/mrtob/PycharmProjects/pygame1/data"
   }
 }]]></component>
@@ -172,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705520357892</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="изменил некоторые значения (теперь яблоко даёт 30 здоровья, а красная шкала при HP &lt; 50) + можно бить на ЛКМ">
+      <option name="closed" value="true" />
+      <created>1705778056226</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1705778056226</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

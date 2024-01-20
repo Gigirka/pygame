@@ -14,6 +14,7 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont('Arial', 40)
 wind_sound = pygame.mixer.Sound("data/wind.ogg")
 step_sound = pygame.mixer.Sound("data/step.ogg")
+enemy_punch_sound = pygame.mixer.Sound("data/enemy_punch.ogg")
 objects = []
 
 left = False
@@ -538,6 +539,7 @@ class Enemy(pygame.sprite.Sprite):
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
                 player.health -= 10
+                enemy_punch_sound.play()
 
         # self.rect.move_ip(*self.velocity)
 
