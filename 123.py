@@ -254,8 +254,12 @@ class HealingApple(pygame.sprite.Sprite):
 
     def heal(self):
         if self.rect.colliderect(player.rect):
+            k = 0
+            while k < 10:
+                if player.health < 100:
+                    player.health += 1
+                k += 1
             self.kill()
-            player.health = 5
 
 
 
@@ -366,6 +370,9 @@ class Player(pygame.sprite.Sprite):
                     for sprite in enemy_group:
                         sprite.rect.x -= self.vx
 
+                    for sprite in healing_apples_group:
+                        sprite.rect.x -= self.vx
+
                 if self.rect.x + self.vx > width - width // 3:  # Движение направо
                     for sprite in tiles_group:
                         sprite.rect.x -= self.vx
@@ -377,6 +384,9 @@ class Player(pygame.sprite.Sprite):
                         sprite.rect.x -= self.vx
 
                     for sprite in enemy_group:
+                        sprite.rect.x -= self.vx
+
+                    for sprite in healing_apples_group:
                         sprite.rect.x -= self.vx
                 collision_sprites = [
                     sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
@@ -396,6 +406,10 @@ class Player(pygame.sprite.Sprite):
 
                         for sprite in enemy_group:
                             sprite.rect.x += self.vx
+
+                        for sprite in healing_apples_group:
+                            sprite.rect.x += self.vx
+
             if self.rect.y + self.vy <= height - height // 2 and self.rect.y + self.vy >= height // 2:  # Движение "внутри рамки" по вертикали
                 self.rect.y += self.vy
             else:  # Если персонаж "выходит за рамку" по вертикали
@@ -412,6 +426,9 @@ class Player(pygame.sprite.Sprite):
                     for sprite in enemy_group:
                         sprite.rect.y -= self.vy
 
+                    for sprite in healing_apples_group:
+                        sprite.rect.y -= self.vy
+
                 if self.rect.y + self.vy > height - height // 3:  # Движение вниз
                     for sprite in tiles_group:
                         sprite.rect.y -= self.vy
@@ -423,6 +440,9 @@ class Player(pygame.sprite.Sprite):
                         sprite.rect.y -= self.vy
 
                     for sprite in enemy_group:
+                        sprite.rect.y -= self.vy
+
+                    for sprite in healing_apples_group:
                         sprite.rect.y -= self.vy
 
                 # Проверка на столкновение с препятствиями
@@ -444,6 +464,10 @@ class Player(pygame.sprite.Sprite):
 
                         for sprite in enemy_group:
                             sprite.rect.y += self.vy
+
+                        for sprite in healing_apples_group:
+                            sprite.rect.y += self.vy
+
             collision_sprites = [
                 sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
                 if sprite.anim_work
@@ -690,7 +714,8 @@ while running:
     enemy_group.draw(screen)
     decor_group.draw(screen)
     healing_apples_group.draw(screen)
-
+    for apple in healing_apples_group:
+        apple.heal()
     for enemy_class in enemy_group:  # Действие для каждого врага
         enemy_class.draw(screen)
 

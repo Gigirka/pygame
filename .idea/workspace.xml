@@ -4,128 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них">
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Небольшое изменение локации + удалил ненужные картинки из data">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_107.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_108.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_109.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_110.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_111.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_112.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_113.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_114.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_115.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_116.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_117.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_118.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_119.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_120.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_121.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_122.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_123.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_124.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_125.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_126.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_127.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_128.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_129.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_130.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_131.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_132.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_133.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_134.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_135.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_136.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_137.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_138.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_139.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_141.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_142.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_143.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_144.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_145.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_146.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_147.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_148.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_149.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_150.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_151.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_152.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_153.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_154.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_155.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_156.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_157.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_158.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_159.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_160.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_161.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_162.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_163.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_164.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_165.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_166.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_167.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_168.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_169.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_170.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_171.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_172.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_173.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_174.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_175.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_176.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_177.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_178.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_179.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_180.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_181.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_182.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_183.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_184.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_185.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_186.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_187.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_188.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_189.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_190.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_191.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_192.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_193.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_194.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_195.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_196.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_197.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_198.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_199.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_200.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_201.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_202.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_203.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_204.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_205.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_206.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_207.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_208.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_209.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_210.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_211.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_212.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_213.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_214.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_215.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_216.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_217.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_218.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_219.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_220.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_221.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_222.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_223.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_224.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/blocks/image_part_225.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,12 +13,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Merge.Settings">
-    <option name="BRANCH" value="main" />
+    <option name="BRANCH" value="main-Ivan" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="main-Ivan" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -170,7 +50,7 @@
     "Python.123.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main-Ivan",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/mrtob/PycharmProjects/pygame1/data"
   }
 }]]></component>
@@ -283,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705513088893</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Небольшое изменение локации + удалил ненужные картинки из data">
+      <option name="closed" value="true" />
+      <created>1705520357892</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1705520357892</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -305,6 +193,7 @@
     <MESSAGE value="Шкала здоровья у врагов" />
     <MESSAGE value="Шкала здоровья у врагов, небольшое изменение стартовой локации" />
     <MESSAGE value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
-    <option name="LAST_COMMIT_MESSAGE" value="Рабочие двери с анимацией, которые пропадают при убийстве врага, отвечающего за них" />
+    <MESSAGE value="Небольшое изменение локации + удалил ненужные картинки из data" />
+    <option name="LAST_COMMIT_MESSAGE" value="Небольшое изменение локации + удалил ненужные картинки из data" />
   </component>
 </project>
