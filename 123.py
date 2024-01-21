@@ -158,6 +158,10 @@ walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (player_size
              pygame.transform.scale(load_image('hero_right/4.png'), (player_size)),
              pygame.transform.scale(load_image('hero_right/5.png'), (player_size))]
 
+hero_Attack = [pygame.transform.scale(load_image('hero_attack/1.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_attack/2.png'), (player_size)),
+             pygame.transform.scale(load_image('hero_attack/3.png'), (player_size))]
+
 hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (33, 33))]
 hero_Dead = [pygame.transform.scale(load_image('hero_dead.png'), (50, 50))]
 
@@ -296,6 +300,7 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = 0
 
     def attack(self):
+        # self.images = hero_Attack
         enemies = pygame.sprite.spritecollide(self, enemy_group, False)
         for enemy in enemies:
             enemy.health -= 5
@@ -503,7 +508,6 @@ class Enemy(pygame.sprite.Sprite):
         self.current_frame = 0
 
     def update_time_dependent(self, dt):
-
         if self.rect.colliderect(player.rect) and player.health != 0:
             # Check if it has been at least 5 seconds since the last attack
             if self.can_attack:
@@ -644,6 +648,7 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.attack()
+            # player.images = hero_Attack
         if event.type == pygame.KEYDOWN:
             player.move = True
             if event.key == pygame.K_s:
