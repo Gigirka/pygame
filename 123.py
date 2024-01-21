@@ -16,6 +16,7 @@ wind_sound = pygame.mixer.Sound("data/wind.ogg")
 step_sound = pygame.mixer.Sound("data/step.ogg")
 enemy_punch_sound = pygame.mixer.Sound("data/enemy_punch.ogg")
 eat_sound = pygame.mixer.Sound("data/eat.wav")
+start_menu_music = pygame.mixer.Sound("data/start_music.ogg")
 objects = []
 
 left = False
@@ -95,6 +96,7 @@ def terminate():
 
 
 def start_screen():
+    start_menu_music.play(-1)
     fon = pygame.transform.scale(load_image('fon.jpg'), (size))
     screen.blit(fon, (0, 0))
     while True:
@@ -106,6 +108,7 @@ def start_screen():
             if start_button.alreadyPressed:  # Функция кнопки старт
                 wind_sound.set_volume(0.5)
                 wind_sound.play(-1)
+                start_menu_music.stop()
                 return
             if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
