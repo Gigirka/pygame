@@ -691,11 +691,11 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.attack()
-            # player.images = hero_Attack
         if event.type == pygame.KEYDOWN and player.can_move:
             player.move = True
             if event.key == pygame.K_s:
                 player.attack()
+                player.image = hero_Attack[2]
             if event.key == pygame.K_LEFT:
                 step_sound.play(-1)
                 player.vx = -8
