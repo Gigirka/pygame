@@ -301,15 +301,17 @@ class Player(pygame.sprite.Sprite):
         self.vy = 0
         self.vx = 0
         self.move = False
+        self.can_move = True
         self.health = 100
-        images = walkLeft + walkRight + hero_Stand
-        if self.health == 0:
+        images = walkLeft + walkRight + hero_Stand + hero_Dead
+        if self.health <= 0:
             self.images = hero_Dead
             end_time = pygame.time.get_ticks()
         self.images = images
         self.images_right = images[0:5]
         self.images_left = images[5:10]
-        self.images_stop = [images[-1]]
+        self.images_stop = [images[-2]]
+        self.images_dead = [images[-1]]
         self.index = 0
         self.image = pygame.transform.scale(images[self.index],
                                             (30, 30))  # 'image' is the current image of the animation.
@@ -329,32 +331,42 @@ class Player(pygame.sprite.Sprite):
             enemy.health -= 5
 
     def update_time_dependent(self, dt):
-        if self.vx < 0 or self.vy > 0 and self.health != 0:  # Use the right images if sprite is moving right.
-            self.images = self.images_right
-        elif self.vx > 0 or self.vy < 0 and self.health != 0:
-            self.images = self.images_left
-        elif self.vx == 0 and self.vy == 0 and self.health != 0:
-            self.images = self.images_stop
+        if self.health <= 0:
+            self.images = hero_Dead
+            self.index = 0
+            self.image = self.images[0]
+        else:
+            if self.vx < 0 or self.vy > 0 and self.health != 0:  # Use the right images if sprite is moving right.
+                self.images = self.images_right
+            elif self.vx > 0 or self.vy < 0 and self.health != 0:
+                self.images = self.images_left
+            elif self.vx == 0 and self.vy == 0 and self.health != 0:
+                self.images = self.images_stop
 
-        self.current_time += dt
-        if self.current_time >= self.animation_time:
-            self.current_time = 0
-            self.index = (self.index + 1) % len(self.images)
-            self.image = self.images[self.index]
+            self.current_time += dt
+            if self.current_time >= self.animation_time:
+                self.current_time = 0
+                self.index = (self.index + 1) % len(self.images)
+                self.image = self.images[self.index]
 
     def update_frame_dependent(self):
-        if self.vx < 0 and self.health != 0:  # Use the right images if sprite is moving right.
-            self.images = self.images_right
-        elif self.vx > 0 and self.health != 0:
-            self.images = self.images_left
-        elif self.vx == 0 and self.vy == 0 and self.health != 0:
-            self.images = self.images_stop
+        if self.health <= 0:
+            self.images = hero_Dead
+            self.index = 0
+            self.image = self.images[0]
+        else:
+            if self.vx < 0 and self.health != 0:  # Use the right images if sprite is moving right.
+                self.images = self.images_right
+            elif self.vx > 0 and self.health != 0:
+                self.images = self.images_left
+            elif self.vx == 0 and self.vy == 0 and self.health != 0:
+                self.images = self.images_stop
 
-        self.current_frame += 1
-        if self.current_frame >= self.animation_frames:
-            self.current_frame = 0
-            self.index = (self.index + 1) % len(self.images)
-            self.image = self.images[self.index]
+            self.current_frame += 1
+            if self.current_frame >= self.animation_frames:
+                self.current_frame = 0
+                self.index = (self.index + 1) % len(self.images)
+                self.image = self.images[self.index]
 
     def draw(self, surf):
         if self.health < 0:
@@ -373,48 +385,132 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         global start_time
         global end_time
-        if self.health == 0:
+        if self.health <= 0:
             self.images = hero_Dead
+            self.index = 0
+            self.image = self.images[0]
+            self.can_move = False
             end_time = pygame.time.get_ticks()
             delta_time = end_time - start_time
-        if self.move:
-            old_x = self.rect.x
-            old_y = self.rect.y
+        else:
+            if self.move:
+                old_x = self.rect.x
+                old_y = self.rect.y
 
-            if self.rect.x + self.vx <= width - width // 3 and self.rect.x + self.vx >= width // 3:  # Движение "внутри рамки" по горизонтали
-                self.rect.x += self.vx
-            else:  # Если персонаж "выходит за рамку" по горизонтали
-                if self.rect.x + self.vx < width // 3:  # Движение налево
-                    for sprite in tiles_group:
-                        sprite.rect.x -= self.vx
+                if self.rect.x + self.vx <= width - width // 3 and self.rect.x + self.vx >= width // 3:  # Движение "внутри рамки" по горизонтали
+                    self.rect.x += self.vx
+                else:  # Если персонаж "выходит за рамку" по горизонтали
+                    if self.rect.x + self.vx < width // 3:  # Движение налево
+                        for sprite in tiles_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in block_tiles_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in block_tiles_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in decor_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in decor_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in enemy_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in enemy_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in healing_apples_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in healing_apples_group:
+                            sprite.rect.x -= self.vx
 
-                if self.rect.x + self.vx > width - width // 3:  # Движение направо
-                    for sprite in tiles_group:
-                        sprite.rect.x -= self.vx
+                    if self.rect.x + self.vx > width - width // 3:  # Движение направо
+                        for sprite in tiles_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in block_tiles_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in block_tiles_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in decor_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in decor_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in enemy_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in enemy_group:
+                            sprite.rect.x -= self.vx
 
-                    for sprite in healing_apples_group:
-                        sprite.rect.x -= self.vx
+                        for sprite in healing_apples_group:
+                            sprite.rect.x -= self.vx
+                    collision_sprites = [
+                        sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                        if sprite.anim_work
+                    ]
+                    collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
+                    for sprite in collision_sprites:
+                        if sprite != self:
+                            for sprite in tiles_group:
+                                sprite.rect.x += self.vx
+
+                            for sprite in block_tiles_group:
+                                sprite.rect.x += self.vx
+
+                            for sprite in decor_group:
+                                sprite.rect.x += self.vx
+
+                            for sprite in enemy_group:
+                                sprite.rect.x += self.vx
+
+                            for sprite in healing_apples_group:
+                                sprite.rect.x += self.vx
+
+                if self.rect.y + self.vy <= height - height // 2 and self.rect.y + self.vy >= height // 2:  # Движение "внутри рамки" по вертикали
+                    self.rect.y += self.vy
+                else:  # Если персонаж "выходит за рамку" по вертикали
+                    if self.rect.y + self.vy < height // 2:  # Движение наверх
+                        for sprite in tiles_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in block_tiles_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in decor_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in enemy_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in healing_apples_group:
+                            sprite.rect.y -= self.vy
+
+                    if self.rect.y + self.vy > height - height // 3:  # Движение вниз
+                        for sprite in tiles_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in block_tiles_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in decor_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in enemy_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in healing_apples_group:
+                            sprite.rect.y -= self.vy
+
+                    # Проверка на столкновение с препятствиями
+                    collision_sprites = [
+                        sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
+                        if sprite.anim_work
+                    ]
+                    collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
+                    for sprite in collision_sprites:
+                        if sprite != self:
+                            for sprite in tiles_group:
+                                sprite.rect.y += self.vy
+
+                            for sprite in block_tiles_group:
+                                sprite.rect.y += self.vy
+
+                            for sprite in decor_group:
+                                sprite.rect.y += self.vy
+
+                            for sprite in enemy_group:
+                                sprite.rect.y += self.vy
+
+                            for sprite in healing_apples_group:
+                                sprite.rect.y += self.vy
+
                 collision_sprites = [
                     sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
                     if sprite.anim_work
@@ -422,88 +518,8 @@ class Player(pygame.sprite.Sprite):
                 collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
                 for sprite in collision_sprites:
                     if sprite != self:
-                        for sprite in tiles_group:
-                            sprite.rect.x += self.vx
-
-                        for sprite in block_tiles_group:
-                            sprite.rect.x += self.vx
-
-                        for sprite in decor_group:
-                            sprite.rect.x += self.vx
-
-                        for sprite in enemy_group:
-                            sprite.rect.x += self.vx
-
-                        for sprite in healing_apples_group:
-                            sprite.rect.x += self.vx
-
-            if self.rect.y + self.vy <= height - height // 2 and self.rect.y + self.vy >= height // 2:  # Движение "внутри рамки" по вертикали
-                self.rect.y += self.vy
-            else:  # Если персонаж "выходит за рамку" по вертикали
-                if self.rect.y + self.vy < height // 2:  # Движение наверх
-                    for sprite in tiles_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in block_tiles_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in decor_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in enemy_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in healing_apples_group:
-                        sprite.rect.y -= self.vy
-
-                if self.rect.y + self.vy > height - height // 3:  # Движение вниз
-                    for sprite in tiles_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in block_tiles_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in decor_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in enemy_group:
-                        sprite.rect.y -= self.vy
-
-                    for sprite in healing_apples_group:
-                        sprite.rect.y -= self.vy
-
-                # Проверка на столкновение с препятствиями
-                collision_sprites = [
-                    sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
-                    if sprite.anim_work
-                ]
-                collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
-                for sprite in collision_sprites:
-                    if sprite != self:
-                        for sprite in tiles_group:
-                            sprite.rect.y += self.vy
-
-                        for sprite in block_tiles_group:
-                            sprite.rect.y += self.vy
-
-                        for sprite in decor_group:
-                            sprite.rect.y += self.vy
-
-                        for sprite in enemy_group:
-                            sprite.rect.y += self.vy
-
-                        for sprite in healing_apples_group:
-                            sprite.rect.y += self.vy
-
-            collision_sprites = [
-                sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
-                if sprite.anim_work
-            ]
-            collision_sprites += pygame.sprite.spritecollide(self, block_tiles_group, False)
-            for sprite in collision_sprites:
-                if sprite != self:
-                    self.rect.x = old_x
-                    self.rect.y = old_y
+                        self.rect.x = old_x
+                        self.rect.y = old_y
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -552,7 +568,7 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 100
+                player.health -= 75
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -676,7 +692,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.attack()
             # player.images = hero_Attack
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN and player.can_move:
             player.move = True
             if event.key == pygame.K_s:
                 player.attack()
@@ -745,7 +761,12 @@ while running:
         displayed_text += text[counter]
         counter += 1
     blit_text(screen, displayed_text, (490, 450), pygame.font.Font(None, 36))
-    if player.health == 0:
+    if player.health <= 0:
+        player.index = 0
+        player.images = player.images_dead
+        player.image = player.images[0]
+        player_group.draw(screen)
+        player.can_move = False
         pygame.mixer.pause()
         print(round(end_time / 1000 - 3, 1), 'секунд')
         end_screen()
