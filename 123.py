@@ -679,11 +679,18 @@ clock = pygame.time.Clock()
 sign_image = pygame.transform.scale(load_image('sign.png'), (450, 120))
 sign_rect = sign_image.get_rect(center=(700, 500))
 
-text = ("""Привет, незнакомец! Ты попал 
+text0 = ("""Привет, незнакомец! Ты попал 
 в лабиринт, который находится 
 вне времени и пространства...""")
+text1 = ("""Чтобы выйти отсюда, тебе 
+придётся устранить 
+босса...""")
+text2 = ("""Однако к нему не так
+просто подобраться: тебя
+встретит его охрана""")
 displayed_text = ""
 counter = 0
+counter_text = 0
 while running:
     dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
     for event in pygame.event.get():
@@ -757,9 +764,15 @@ while running:
     player_group.draw(screen)
     player.draw(screen)
     screen.blit(sign_image, sign_rect)
-    if counter < len(text):
-        displayed_text += text[counter]
+    text = [text0, text1, text2][counter_text]
+    if counter < len(text) + 15:
+        if counter < len(text):
+            displayed_text += text[counter]
         counter += 1
+    if counter == len(text) + 15 and counter_text < 2:
+        counter = 0
+        counter_text += 1
+        displayed_text = ''
     blit_text(screen, displayed_text, (490, 450), pygame.font.Font(None, 36))
     if player.health <= 0:
         player.index = 0

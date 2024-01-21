@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Исправлен баг, при котором не появлялся спрайт &quot;смерти&quot;; Добавлен песок + новые стены для нового уровня">
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Анимация атаки">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
     </list>
@@ -207,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705870016828</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Анимация атаки">
+      <option name="closed" value="true" />
+      <created>1705870864113</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1705870864113</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -247,6 +255,7 @@
     <MESSAGE value="Исправил ошибку со звуком ходьбы" />
     <MESSAGE value="Удалил лишние строчки кода" />
     <MESSAGE value="Исправлен баг, при котором не появлялся спрайт &quot;смерти&quot;; Добавлен песок + новые стены для нового уровня" />
-    <option name="LAST_COMMIT_MESSAGE" value="Исправлен баг, при котором не появлялся спрайт &quot;смерти&quot;; Добавлен песок + новые стены для нового уровня" />
+    <MESSAGE value="Анимация атаки" />
+    <option name="LAST_COMMIT_MESSAGE" value="Анимация атаки" />
   </component>
 </project>
