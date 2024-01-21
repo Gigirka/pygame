@@ -159,6 +159,7 @@ walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (player_size
              pygame.transform.scale(load_image('hero_right/5.png'), (player_size))]
 
 hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (33, 33))]
+hero_Dead = [pygame.transform.scale(load_image('hero_dead.png'), (50, 50))]
 
 enemy_size = 280, 280
 enemyAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_008.png'), (enemy_size)),
@@ -276,6 +277,8 @@ class Player(pygame.sprite.Sprite):
         self.move = False
         self.health = 100
         images = walkLeft + walkRight + hero_Stand
+        if self.health == 0:
+            self.images = hero_Dead
         self.images = images
         self.images_right = images[0:5]
         self.images_left = images[5:10]
@@ -298,11 +301,11 @@ class Player(pygame.sprite.Sprite):
             enemy.health -= 5
 
     def update_time_dependent(self, dt):
-        if self.vx < 0 or self.vy > 0:  # Use the right images if sprite is moving right.
+        if self.vx < 0 or self.vy > 0 and self.health != 0:  # Use the right images if sprite is moving right.
             self.images = self.images_right
-        elif self.vx > 0 or self.vy < 0:
+        elif self.vx > 0 or self.vy < 0 and self.health != 0:
             self.images = self.images_left
-        elif self.vx == 0 and self.vy == 0:
+        elif self.vx == 0 and self.vy == 0 and self.health != 0:
             self.images = self.images_stop
 
         self.current_time += dt
@@ -312,11 +315,11 @@ class Player(pygame.sprite.Sprite):
             self.image = self.images[self.index]
 
     def update_frame_dependent(self):
-        if self.vx < 0:  # Use the right images if sprite is moving right.
+        if self.vx < 0 and self.health != 0:  # Use the right images if sprite is moving right.
             self.images = self.images_right
-        elif self.vx > 0:
+        elif self.vx > 0 and self.health != 0:
             self.images = self.images_left
-        elif self.vx == 0 and self.vy == 0:
+        elif self.vx == 0 and self.vy == 0 and self.health != 0:
             self.images = self.images_stop
 
         self.current_frame += 1
@@ -340,6 +343,8 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(surf, 'white', outline_rect_1, 2)
 
     def update(self):
+        if self.health == 0:
+            self.images = hero_Dead
         if self.move:
             old_x = self.rect.x
             old_y = self.rect.y
@@ -499,7 +504,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def update_time_dependent(self, dt):
 
-        if self.rect.colliderect(player.rect):
+        if self.rect.colliderect(player.rect) and player.health != 0:
             # Check if it has been at least 5 seconds since the last attack
             if self.can_attack:
                 self.images = self.images_attack
