@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Добавил звук смерти героя">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
-    </list>
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Добавил надпись game over" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -223,7 +220,23 @@
       <option name="project" value="LOCAL" />
       <updated>1705862945103</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Добавил надпись game over">
+      <option name="closed" value="true" />
+      <created>1705863632032</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1705863632032</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Добавил надпись game over">
+      <option name="closed" value="true" />
+      <created>1705863734154</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1705863734154</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -264,6 +277,7 @@
     <MESSAGE value="Удалил лишние строчки кода" />
     <MESSAGE value="Загрузил спрайты для атаки героя (пока не работает)" />
     <MESSAGE value="Добавил звук смерти героя" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил звук смерти героя" />
+    <MESSAGE value="Добавил надпись game over" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил надпись game over" />
   </component>
 </project>

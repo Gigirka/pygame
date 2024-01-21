@@ -141,7 +141,6 @@ def start_screen():
 
 start_screen()
 
-
 def load_level(filename):
     filename = "data/" + filename
     # читаем уровень, убирая символы перевода строки
