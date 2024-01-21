@@ -22,6 +22,8 @@ step_sound = pygame.mixer.Sound("data/step.ogg")
 enemy_punch_sound = pygame.mixer.Sound("data/enemy_punch.ogg")
 eat_sound = pygame.mixer.Sound("data/eat.wav")
 start_menu_music = pygame.mixer.Sound("data/start_music.ogg")
+hero_death_music = pygame.mixer.Sound("data/hero_death.ogg")
+hero_death_sound = pygame.mixer.Sound("data/hero_death_sound.ogg")
 objects = []
 
 left = False
@@ -104,6 +106,8 @@ fon = pygame.transform.scale(load_image('fon.jpg'), (size))
 
 
 def end_screen():
+    hero_death_music.play()
+    hero_death_sound.play()
     pygame.draw.rect(fon, (255, 0, 0, 65), (0, 0, width, height))
     screen.blit(fon, (0, 0))
     while True:
@@ -742,6 +746,7 @@ while running:
         counter += 1
     blit_text(screen, displayed_text, (490, 450), pygame.font.Font(None, 36))
     if player.health == 0:
+        pygame.mixer.pause()
         print(round(end_time / 1000 - 3, 1), 'секунд')
         end_screen()
         break
