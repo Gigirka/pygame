@@ -1,11 +1,16 @@
 import os
 import random
 import sys
+import time
+
 import pygame
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
 
 pygame.init()
+start_time = pygame.time.get_ticks()
+end_time = 0
+
 size = width, height = 1000, 600
 screen = pygame.display.set_mode(size)
 FPS = 50
@@ -95,9 +100,22 @@ def terminate():
     sys.exit()
 
 
+fon = pygame.transform.scale(load_image('fon.jpg'), (size))
+
+
+def end_screen():
+    pygame.draw.rect(fon, (255, 0, 0, 65), (0, 0, width, height))
+    screen.blit(fon, (0, 0))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 def start_screen():
     start_menu_music.play(-1)
-    fon = pygame.transform.scale(load_image('fon.jpg'), (size))
     screen.blit(fon, (0, 0))
     while True:
         for event in pygame.event.get():
@@ -159,8 +177,8 @@ walkRight = [pygame.transform.scale(load_image('hero_right/1.png'), (player_size
              pygame.transform.scale(load_image('hero_right/5.png'), (player_size))]
 
 hero_Attack = [pygame.transform.scale(load_image('hero_attack/1.png'), (player_size)),
-             pygame.transform.scale(load_image('hero_attack/2.png'), (player_size)),
-             pygame.transform.scale(load_image('hero_attack/3.png'), (player_size))]
+               pygame.transform.scale(load_image('hero_attack/2.png'), (player_size)),
+               pygame.transform.scale(load_image('hero_attack/3.png'), (player_size))]
 
 hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (33, 33))]
 hero_Dead = [pygame.transform.scale(load_image('hero_dead.png'), (50, 50))]
@@ -283,6 +301,7 @@ class Player(pygame.sprite.Sprite):
         images = walkLeft + walkRight + hero_Stand
         if self.health == 0:
             self.images = hero_Dead
+            end_time = pygame.time.get_ticks()
         self.images = images
         self.images_right = images[0:5]
         self.images_left = images[5:10]
@@ -348,8 +367,12 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(surf, 'white', outline_rect_1, 2)
 
     def update(self):
+        global start_time
+        global end_time
         if self.health == 0:
             self.images = hero_Dead
+            end_time = pygame.time.get_ticks()
+            delta_time = end_time - start_time
         if self.move:
             old_x = self.rect.x
             old_y = self.rect.y
@@ -525,7 +548,7 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 10
+                player.health -= 100
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -718,7 +741,10 @@ while running:
         displayed_text += text[counter]
         counter += 1
     blit_text(screen, displayed_text, (490, 450), pygame.font.Font(None, 36))
-
+    if player.health == 0:
+        print(round(end_time / 1000 - 3, 1), 'секунд')
+        end_screen()
+        break
     clock.tick(FPS)
     pygame.display.flip()
 
