@@ -268,7 +268,6 @@ class HealingApple(pygame.sprite.Sprite):
             self.kill()
 
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
@@ -276,9 +275,7 @@ class Player(pygame.sprite.Sprite):
         self.vx = 0
         self.move = False
         self.health = 100
-        # size = (32, 32)  # This should match the size of the images.
         images = walkLeft + walkRight + hero_Stand
-        # self.rect = pygame.Rect(position, size)
         self.images = images
         self.images_right = images[0:5]
         self.images_left = images[5:10]
@@ -301,12 +298,6 @@ class Player(pygame.sprite.Sprite):
             enemy.health -= 5
 
     def update_time_dependent(self, dt):
-        """
-        Updates the image of Sprite approximately every 0.1 second.
-
-        Args:
-            dt: Time elapsed between each frame.
-        """
         if self.vx < 0 or self.vy > 0:  # Use the right images if sprite is moving right.
             self.images = self.images_right
         elif self.vx > 0 or self.vy < 0:
@@ -320,12 +311,7 @@ class Player(pygame.sprite.Sprite):
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
 
-        # self.rect.move_ip(*self.velocity)
-
     def update_frame_dependent(self):
-        """
-        Updates the image of Sprite every 6 frame (approximately every 0.1 second if frame rate is 60).
-        """
         if self.vx < 0:  # Use the right images if sprite is moving right.
             self.images = self.images_right
         elif self.vx > 0:
@@ -338,8 +324,6 @@ class Player(pygame.sprite.Sprite):
             self.current_frame = 0
             self.index = (self.index + 1) % len(self.images)
             self.image = self.images[self.index]
-
-        # self.rect.move_ip(*self.velocity)
 
     def draw(self, surf):
         if self.health < 0:
@@ -488,14 +472,11 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y, str_key):  # str_key - массив с координатами нужных дверей
         super().__init__(enemy_group, all_sprites)
-        # self.vy = 0
-        # self.vx = 0
         self.make_check = True  # проверять ли двери после смерти (для оптимизации)
         self.str_key_block = str_key
         self.move = False
         self.health = 100
         self.can_attack = False
-        # size = (32, 32)  # This should match the size of the images.
         images = enemyAttack + enemyStand
         self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
         self.images = images
@@ -508,8 +489,6 @@ class Enemy(pygame.sprite.Sprite):
                                             (5, 5))  # 'image' is the current image of the animation.
         # Переопределяем координаты коллизии
 
-        # self.hitbox = (self.rect.x + 17, self.rect.y + 2, 31, 57)
-
         self.animation_time = 0.05
         self.current_time = 0
 
@@ -519,12 +498,6 @@ class Enemy(pygame.sprite.Sprite):
         self.current_frame = 0
 
     def update_time_dependent(self, dt):
-        """
-        Updates the image of Sprite approximately every 0.1 second.
-
-        Args:
-            dt: Time elapsed between each frame.
-        """
 
         if self.rect.colliderect(player.rect):
             # Check if it has been at least 5 seconds since the last attack
@@ -545,8 +518,6 @@ class Enemy(pygame.sprite.Sprite):
                 self.last_attack_time = self.timee
                 player.health -= 10
                 enemy_punch_sound.play()
-
-        # self.rect.move_ip(*self.velocity)
 
     def draw(self, surf):
         if self.health < 0:
@@ -643,7 +614,6 @@ def generate_level(level):
                 new_player = Player(x, y)
             elif level[y][x] == '$':
                 Tile('empty', x, y, True, (str(x) + str(y)))
-                print(str(x) + str(y))  # Узнать ключ для каждой двери
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
