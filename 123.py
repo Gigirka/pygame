@@ -667,23 +667,26 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.attack()
         if event.type == pygame.KEYDOWN:
-            step_sound.play(-1)
             player.move = True
             if event.key == pygame.K_s:
                 player.attack()
             if event.key == pygame.K_LEFT:
+                step_sound.play(-1)
                 player.vx = -8
                 left = True
                 right = False
             elif event.key == pygame.K_RIGHT:
+                step_sound.play(-1)
                 player.vx = 8
                 left = False
                 right = True
             elif event.key == pygame.K_UP:
+                step_sound.play(-1)
                 player.vy = -8
                 left = False
                 right = True
             elif event.key == pygame.K_DOWN:
+                step_sound.play(-1)
                 player.vy = 8
                 left = False
                 right = True
