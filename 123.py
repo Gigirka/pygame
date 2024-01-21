@@ -110,6 +110,7 @@ def end_screen():
     hero_death_sound.play()
     pygame.draw.rect(fon, (255, 0, 0, 65), (0, 0, width, height))
     screen.blit(fon, (0, 0))
+    blit_text(screen, 'GAME     OVER', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150), color=pygame.Color('black'))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
