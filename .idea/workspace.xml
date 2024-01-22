@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Анимация атаки">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/map1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map1.txt" afterDir="false" />
-    </list>
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Начальный вид 2 уровня" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -217,7 +213,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705870864113</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Начальный вид 2 уровня">
+      <option name="closed" value="true" />
+      <created>1705930792822</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1705930792822</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -258,6 +262,7 @@
     <MESSAGE value="Удалил лишние строчки кода" />
     <MESSAGE value="Исправлен баг, при котором не появлялся спрайт &quot;смерти&quot;; Добавлен песок + новые стены для нового уровня" />
     <MESSAGE value="Анимация атаки" />
-    <option name="LAST_COMMIT_MESSAGE" value="Анимация атаки" />
+    <MESSAGE value="Начальный вид 2 уровня" />
+    <option name="LAST_COMMIT_MESSAGE" value="Начальный вид 2 уровня" />
   </component>
 </project>
