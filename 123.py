@@ -82,7 +82,7 @@ def call_func3():
 
 
 start_button = Button(width / 2 - 150, height / 5, 300, 75, 'Старт!', call_func1)
-history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
+# history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
 exit_button = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
 
 
@@ -105,7 +105,18 @@ def terminate():
 
 fon = pygame.transform.scale(load_image('fon.jpg'), (size))
 
-
+def win_screeen():
+    pygame.mixer.pause()
+    pygame.draw.rect(fon, (255, 130, 0, 65), (0, 0, width, height))
+    screen.blit(fon, (0, 0))
+    blit_text(screen, 'ВЫ  ПРОШЛИ  ИГРУ!', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
+              color=pygame.Color('black'))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+        pygame.display.flip()
+        clock.tick(FPS)
 def end_screen():
     hero_death_music.play()
     hero_death_sound.play()
@@ -137,28 +148,18 @@ def start_screen():
                 return
             if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
-            if history_button.alreadyPressed:
-                history_screen()
-                return
-                # file = open('data/history_results.txt', 'r', encoding='utf-16')
-                # for line in file:
-                #     instructText = font.render(line, True, 'WHITE')
-                #     screen.blit(instructText,
-                #             ((400 - (instructText.get_width() / 2)), (300 - (instructText.get_height() / 2))))
+            # if history_button.alreadyPressed:
+            #     file = open('data/history_results.txt', 'r', encoding='utf-16')
+            #     for line in file:
+            #         instructText = font.render(line, True, 'WHITE')
+            #         screen.blit(instructText,
+            #                 ((400 - (instructText.get_width() / 2)), (300 - (instructText.get_height() / 2))))
         pygame.display.flip()
         clock.tick(FPS)
 
 
 start_screen()
 
-
-def history_screen():
-    start_menu_music.play(-1)
-    pygame.draw.rect(screen, (0, 0, 0, 255), (0, 0, width, height))
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                terminate()
 
 
 def load_level(filename):
@@ -381,7 +382,7 @@ class Player(pygame.sprite.Sprite):
         # self.images = hero_Attack
         enemies = pygame.sprite.spritecollide(self, enemy_group, False)
         for enemy in enemies:
-            enemy.health -= 5
+            enemy.health -= 50
 
     def update_time_dependent(self, dt):
         if self.health <= 0:
@@ -639,7 +640,94 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 50
+                player.health -= 10
+                enemy_punch_sound.play()
+
+    def draw(self, surf):
+        if self.health < 0:
+            self.health = 0
+        BAR_LENGTH_1 = 100
+        BAR_HEIGHT_1 = 15
+        fill_1 = (self.health / 100) * BAR_LENGTH_1
+        outline_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, BAR_LENGTH_1, BAR_HEIGHT_1)
+        fill_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, fill_1, BAR_HEIGHT_1)
+        if self.health >= 50:
+            pygame.draw.rect(surf, 'green', fill_rect_1)
+        else:
+            pygame.draw.rect(surf, 'red', fill_rect_1)
+        pygame.draw.rect(surf, 'white', outline_rect_1, 2)
+
+    def update_frame_dependent(self):
+        pass
+
+    def update(self):
+        k = 0
+        self.timee = pygame.time.get_ticks()
+        if self.timee - self.last_attack_time >= 1000:
+            self.can_attack = True
+        else:
+            self.can_attack = False
+        if self.health == 0 and self.make_check:
+            for x_y_key in self.str_key_block:
+                for block in tiles_group:
+                    if block.anim_work == True:
+                        if block.str_key == str(x_y_key):
+                            block.anim_work = False
+                            k += 1
+
+        if k == 2:  # если обе двери уничтожены, больше не проверять их наличие
+            self.make_check = False
+        if self.health == 0:
+            self.kill()
+
+
+class Boss(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, str_key):  # str_key - массив с координатами нужных дверей
+        super().__init__(enemy_group, all_sprites)
+        self.make_check = True  # проверять ли двери после смерти (для оптимизации)
+        self.str_key_block = str_key
+        self.move = False
+        self.health = 300
+        self.can_attack = False
+        images = enemyAttack + enemyStand
+        self.rect = pygame.Rect((pos_x, pos_y), (480, 480))
+        self.images = images
+        self.images_attack = images[0:8]
+        self.images_idle = images[10:16]
+        self.index = 0
+        self.last_attack_time = 0
+
+        self.image = pygame.transform.scale(images[self.index],
+                                            (5, 5))  # 'image' is the current image of the animation.
+        # Переопределяем координаты коллизии
+
+        self.animation_time = 0.05
+        self.current_time = 0
+
+        self.timee = 0
+
+        self.animation_frames = 6
+        self.current_frame = 0
+
+    def update_time_dependent(self, dt):
+        if self.rect.colliderect(player.rect) and player.health != 0:
+            # Check if it has been at least 5 seconds since the last attack
+            if self.can_attack:
+                self.images = self.images_attack
+
+            else:
+                self.images = self.images_idle
+        else:
+            self.images = self.images_idle
+
+        self.current_time += dt
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+            if self.image == self.images_attack[0]:
+                self.last_attack_time = self.timee
+                player.health -= 10
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -881,6 +969,7 @@ def level2():
     black_l = Black(0, 0)
     enemy1 = Enemy(480, 110, (134, 135))
     enemy2 = Enemy(1100, 160, (255, 256))
+    boss = Boss(300, 400, (255, 256))
     big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
                  (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
     apple = HealingApple(10, 10, 'apple.png', (70, 40))
@@ -966,17 +1055,33 @@ def level2():
 
         player_group.draw(screen)
         player.draw(screen)
+        if boss.health <= 0:
+            win_screeen()
+            pygame.mixer.pause()
+            file = open('data/history_results.txt', 'r', encoding='utf-16')
+            text = file.readlines()
+            file = open('data/history_results.txt', 'w', encoding='utf-16')
+            file.write(
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'{str(datetime.datetime.now())}\n'
+                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+                f'Статус игры: Победа\n'
+                f'{''.join(text)}')
+            break
         if player.health <= 0:
             file = open('data/history_results.txt', 'r', encoding='utf-16')
             text = file.readlines()
             file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(f'{''.join(text)}\n'
+            file.write(
                        f'----------------------------------------------------\n'
                        f'----------------------------------------------------\n'
                        f'----------------------------------------------------\n'
                        f'{str(datetime.datetime.now())}\n'
                        f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                       f'Статус игры: Поражение')
+                       f'Статус игры: Поражение\n'
+                        f'{''.join(text)}')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
