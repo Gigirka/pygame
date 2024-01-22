@@ -110,7 +110,8 @@ def end_screen():
     hero_death_sound.play()
     pygame.draw.rect(fon, (255, 0, 0, 65), (0, 0, width, height))
     screen.blit(fon, (0, 0))
-    blit_text(screen, 'GAME     OVER', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150), color=pygame.Color('black'))
+    blit_text(screen, 'GAME     OVER', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
+              color=pygame.Color('black'))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -140,6 +141,7 @@ def start_screen():
 
 
 start_screen()
+
 
 def load_level(filename):
     filename = "data/" + filename
@@ -184,6 +186,11 @@ hero_Attack = [pygame.transform.scale(load_image('hero_attack/1.png'), (player_s
                pygame.transform.scale(load_image('hero_attack/2.png'), (player_size)),
                pygame.transform.scale(load_image('hero_attack/3.png'), (player_size))]
 
+portal_img = [pygame.transform.scale(load_image('portal/1.png'), (50, 80)),
+              pygame.transform.scale(load_image('portal/2.png'), (50, 80)),
+              pygame.transform.scale(load_image('portal/3.png'), (50, 80)),
+              pygame.transform.scale(load_image('portal/4.png'), (50, 80))]
+
 hero_Stand = [pygame.transform.scale(load_image('stop_hero.png'), (33, 33))]
 hero_Dead = [pygame.transform.scale(load_image('hero_dead.png'), (50, 50))]
 
@@ -218,6 +225,30 @@ class DecorCreate(pygame.sprite.Sprite):  # Класс для создания �
         self.image = pygame.transform.scale(load_image(file_name), (size))  # Adjust the size as needed
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
+
+
+class Portal(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y, file_name, size):
+        super().__init__(portal_group, all_sprites)
+        self.images = portal_img
+        self.index = 0
+        self.image = pygame.transform.scale(portal_img[self.index],
+                                            (50, 80))  # 'image' is the current image of the animation.
+        self.rect = self.image.get_rect().move(
+            tile_width * pos_x + 15, tile_height * pos_y)
+
+        self.animation_time = 0.05
+        self.current_time = 0
+
+        self.animation_frames = 6
+        self.current_frame = 0
+
+    def update(self, dt):
+        self.current_time += dt
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
 
 
 class Tile(pygame.sprite.Sprite):
@@ -416,6 +447,9 @@ class Player(pygame.sprite.Sprite):
                         for sprite in healing_apples_group:
                             sprite.rect.x -= self.vx
 
+                        for sprite in portal_group:
+                            sprite.rect.x -= self.vx
+
                     if self.rect.x + self.vx > width - width // 3:  # Движение направо
                         for sprite in tiles_group:
                             sprite.rect.x -= self.vx
@@ -430,6 +464,9 @@ class Player(pygame.sprite.Sprite):
                             sprite.rect.x -= self.vx
 
                         for sprite in healing_apples_group:
+                            sprite.rect.x -= self.vx
+
+                        for sprite in portal_group:
                             sprite.rect.x -= self.vx
                     collision_sprites = [
                         sprite for sprite in pygame.sprite.spritecollide(self, tiles_group, False)  # коллизия с дверьми
@@ -453,6 +490,9 @@ class Player(pygame.sprite.Sprite):
                             for sprite in healing_apples_group:
                                 sprite.rect.x += self.vx
 
+                            for sprite in portal_group:
+                                sprite.rect.x += self.vx
+
                 if self.rect.y + self.vy <= height - height // 2 and self.rect.y + self.vy >= height // 2:  # Движение "внутри рамки" по вертикали
                     self.rect.y += self.vy
                 else:  # Если персонаж "выходит за рамку" по вертикали
@@ -472,6 +512,9 @@ class Player(pygame.sprite.Sprite):
                         for sprite in healing_apples_group:
                             sprite.rect.y -= self.vy
 
+                        for sprite in portal_group:
+                            sprite.rect.y -= self.vy
+
                     if self.rect.y + self.vy > height - height // 3:  # Движение вниз
                         for sprite in tiles_group:
                             sprite.rect.y -= self.vy
@@ -486,6 +529,9 @@ class Player(pygame.sprite.Sprite):
                             sprite.rect.y -= self.vy
 
                         for sprite in healing_apples_group:
+                            sprite.rect.y -= self.vy
+
+                        for sprite in portal_group:
                             sprite.rect.y -= self.vy
 
                     # Проверка на столкновение с препятствиями
@@ -509,6 +555,9 @@ class Player(pygame.sprite.Sprite):
                                 sprite.rect.y += self.vy
 
                             for sprite in healing_apples_group:
+                                sprite.rect.y += self.vy
+
+                            for sprite in portal_group:
                                 sprite.rect.y += self.vy
 
                 collision_sprites = [
@@ -568,7 +617,7 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 75
+                player.health -= 10
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -615,6 +664,7 @@ enemy_group = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
+portal_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
 healing_apples_group = pygame.sprite.Group()
 black_l = Black(0, 0)
@@ -625,6 +675,7 @@ house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
 big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
              (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
 apple = HealingApple(7, 5, 'apple.png', (70, 40))
+portal = Portal(35, 8, portal_img, (50, 80))
 for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
 
@@ -693,11 +744,14 @@ counter = 0
 counter_text = 0
 while running:
     dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
+    if portal.rect.colliderect(player.rect):
+        terminate()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.attack()
+            player.image = hero_Attack[2]
         if event.type == pygame.KEYDOWN and player.can_move:
             player.move = True
             if event.key == pygame.K_s:
@@ -743,6 +797,7 @@ while running:
         enemy_class.update_frame_dependent()
 
     player.update()
+    portal.update(dt)
     player.update_time_dependent(dt)
     player.update_frame_dependent()
     black_l.update()
@@ -756,6 +811,7 @@ while running:
     enemy_group.draw(screen)
     decor_group.draw(screen)
     healing_apples_group.draw(screen)
+    portal_group.draw(screen)
     for apple in healing_apples_group:
         apple.heal()
     for enemy_class in enemy_group:  # Действие для каждого врага
@@ -786,5 +842,4 @@ while running:
         break
     clock.tick(FPS)
     pygame.display.flip()
-
 pygame.quit()
