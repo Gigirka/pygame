@@ -188,8 +188,10 @@ tile_images = {
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
     'block_door': blocks,
-    'sand_wall': pygame.transform.scale(load_image('sand_wall.png'), (50, 50))
+    'sand_wall': pygame.transform.scale(load_image('sand_wall.png'), (50, 50)),
+    'sand': pygame.transform.scale(load_image('sand1.png'), (50, 50))
 }
+level1on = True
 player_size = 60, 60
 walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (player_size)),
             pygame.transform.scale(load_image('hero_left/4.png'), (player_size)),
@@ -305,7 +307,10 @@ class Tile(pygame.sprite.Sprite):
                 self.index = (self.index + 1) % len(self.images)
                 self.image = self.images[self.index]
         else:
-            self.image = tile_images['empty']
+            if level1on:
+                self.image = tile_images['empty']
+            else:
+                self.image = tile_images['sand']
 
 
 class Black(pygame.sprite.Sprite):
@@ -948,21 +953,23 @@ def level1():
 
 
 def level2():
+    global level1on
+    level1on = False
     wind_sound.stop()
     for y in range(len(level)):
         for x in range(len(level02[y])):
             if level02[y][x] == '.':
-                Tile('empty', x, y, False, '')
+                Tile('sand', x, y, False, '')
             if level02[y][x] == '!':
-                Tile('empty', x, y, False, '')
+                Tile('sand', x, y, False, '')
                 Tile('tree', x, y, False, '')
             if level02[y][x] == '1':
-                Tile('empty', x, y, False, '')
+                Tile('sand', x, y, False, '')
                 Tile('tree1', x, y, False, '')
             elif level02[y][x] == '#':
                 BlockTile('sand_wall', x, y)
             elif level02[y][x] == '$':
-                Tile('empty', x, y, True, (str(x) + str(y)))
+                Tile('sand', x, y, True, (str(x) + str(y)))
     global player
     global level_x
     global level_y
@@ -974,8 +981,8 @@ def level2():
                  (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
     apple = HealingApple(10, 10, 'apple.png', (70, 40))
 
-    for e in big_trees:  # Проходимся по массиву и создаём деревья
-        new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
+    #for e in big_trees:  # Проходимся по массиву и создаём деревья
+        #new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
     # группа, содержащая все спрайты
     all_sprites = pygame.sprite.Group()
     running = True
