@@ -845,8 +845,6 @@ def level2():
     all_sprites = pygame.sprite.Group()
     running = True
     clock = pygame.time.Clock()
-    sign_image = pygame.transform.scale(load_image('sign.png'), (450, 120))
-    sign_rect = sign_image.get_rect(center=(700, 500))
     while running:
         dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
         for event in pygame.event.get():
@@ -922,7 +920,6 @@ def level2():
 
         player_group.draw(screen)
         player.draw(screen)
-        screen.blit(sign_image, sign_rect)
         if player.health <= 0:
             player.index = 0
             player.images = player.images_dead
