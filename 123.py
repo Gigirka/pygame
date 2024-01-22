@@ -157,6 +157,7 @@ def load_level(filename):
 
 
 level = load_level('map0.txt')
+level02 = load_level('map1.txt')
 
 blocks = []
 for i in range(100, 107):
@@ -167,7 +168,8 @@ tile_images = {
     'empty': pygame.transform.scale(load_image('snow1.png'), (90, 90)),
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
-    'block_door': blocks
+    'block_door': blocks,
+    'sand_wall': pygame.transform.scale(load_image('sand_wall.png'), (50, 50))
 }
 player_size = 60, 60
 walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (player_size)),
@@ -829,6 +831,21 @@ def level1():
 
 
 def level2():
+    wind_sound.stop()
+    for y in range(len(level)):
+        for x in range(len(level02[y])):
+            if level02[y][x] == '.':
+                Tile('empty', x, y, False, '')
+            if level02[y][x] == '!':
+                Tile('empty', x, y, False, '')
+                Tile('tree', x, y, False, '')
+            if level02[y][x] == '1':
+                Tile('empty', x, y, False, '')
+                Tile('tree1', x, y, False, '')
+            elif level02[y][x] == '#':
+                BlockTile('sand_wall', x, y)
+            elif level02[y][x] == '$':
+                Tile('empty', x, y, True, (str(x) + str(y)))
     global player
     global level_x
     global level_y
