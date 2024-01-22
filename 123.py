@@ -1056,8 +1056,6 @@ def level2():
         player_group.draw(screen)
         player.draw(screen)
         if boss.health <= 0:
-            win_screeen()
-            pygame.mixer.pause()
             file = open('data/history_results.txt', 'r', encoding='utf-16')
             text = file.readlines()
             file = open('data/history_results.txt', 'w', encoding='utf-16')
@@ -1069,6 +1067,8 @@ def level2():
                 f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
                 f'Статус игры: Победа\n'
                 f'{''.join(text)}')
+            win_screeen()
+            pygame.mixer.pause()
             break
         if player.health <= 0:
             file = open('data/history_results.txt', 'r', encoding='utf-16')
