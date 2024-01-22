@@ -2,7 +2,7 @@ import os
 import random
 import sys
 import time
-import datetime
+
 import pygame
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
@@ -25,7 +25,6 @@ start_menu_music = pygame.mixer.Sound("data/start_music.ogg")
 hero_death_music = pygame.mixer.Sound("data/hero_death.ogg")
 hero_death_sound = pygame.mixer.Sound("data/hero_death_sound.ogg")
 objects = []
-number_of_apples = 0
 
 left = False
 right = False
@@ -85,6 +84,7 @@ start_button = Button(width / 2 - 150, height / 5, 300, 75, 'Старт!', call_
 history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
 exit_button = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
 
+level1on = True
 
 # Конец кода с кнопками
 
@@ -137,28 +137,11 @@ def start_screen():
                 return
             if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
-            if history_button.alreadyPressed:
-                history_screen()
-                return
-                # file = open('data/history_results.txt', 'r', encoding='utf-16')
-                # for line in file:
-                #     instructText = font.render(line, True, 'WHITE')
-                #     screen.blit(instructText,
-                #             ((400 - (instructText.get_width() / 2)), (300 - (instructText.get_height() / 2))))
         pygame.display.flip()
         clock.tick(FPS)
 
 
 start_screen()
-
-
-def history_screen():
-    start_menu_music.play(-1)
-    pygame.draw.rect(screen, (0, 0, 0, 255), (0, 0, width, height))
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                terminate()
 
 
 def load_level(filename):
@@ -187,7 +170,8 @@ tile_images = {
     'tree': pygame.transform.scale(load_image('winter_tree.png'), (50, 50)),
     'tree1': pygame.transform.scale(load_image('winter_tree1.png'), (50, 50)),
     'block_door': blocks,
-    'sand_wall': pygame.transform.scale(load_image('sand_wall.png'), (50, 50))
+    'sand_wall': pygame.transform.scale(load_image('sand_wall.png'), (50, 50)),
+    'sand': pygame.transform.scale(load_image('sand1.png'), (90, 90))
 }
 player_size = 60, 60
 walkLeft = [pygame.transform.scale(load_image('hero_left/5.png'), (player_size)),
@@ -304,7 +288,10 @@ class Tile(pygame.sprite.Sprite):
                 self.index = (self.index + 1) % len(self.images)
                 self.image = self.images[self.index]
         else:
-            self.image = tile_images['empty']
+            if level1on:
+                self.image = tile_images['empty']
+            else:
+                self.image = tile_images['sand']
 
 
 class Black(pygame.sprite.Sprite):
@@ -336,7 +323,6 @@ class HealingApple(pygame.sprite.Sprite):
             tile_width * pos_x, tile_height * pos_y)
 
     def heal(self):
-        global number_of_apples
         if self.rect.colliderect(player.rect):
             k = 0
             eat_sound.play()
@@ -344,7 +330,6 @@ class HealingApple(pygame.sprite.Sprite):
                 if player.health < 100:
                     player.health += 1
                 k += 1
-            number_of_apples += 1
             self.kill()
 
 
@@ -639,7 +624,7 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 50
+                player.health -= 10
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -754,7 +739,7 @@ def level1():
             return
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                terminate()
+                running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 player.attack()
                 player.image = hero_Attack[2]
@@ -837,22 +822,13 @@ def level1():
             displayed_text = ''
         blit_text(screen, displayed_text, (490, 450), pygame.font.Font(None, 36))
         if player.health <= 0:
-            file = open('data/history_results.txt', 'r', encoding='utf-16')
-            text = file.readlines()
-            file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(f'{''.join(text)}\n'
-                       f'----------------------------------------------------\n'
-                       f'----------------------------------------------------\n'
-                       f'----------------------------------------------------\n'
-                       f'{str(datetime.datetime.now())}\n'
-                       f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                       f'Статус игры: Поражение')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
             player_group.draw(screen)
             player.can_move = False
             pygame.mixer.pause()
+            print(round(end_time / 1000 - 3, 1), 'секунд')
             end_screen()
             break
         clock.tick(FPS)
@@ -860,21 +836,23 @@ def level1():
 
 
 def level2():
+    global level1on
+    level1on = False
     wind_sound.stop()
     for y in range(len(level)):
         for x in range(len(level02[y])):
             if level02[y][x] == '.':
-                Tile('empty', x, y, False, '')
+                Tile('sand', x, y, False, '')
             if level02[y][x] == '!':
-                Tile('empty', x, y, False, '')
+                Tile('sand', x, y, False, '')
                 Tile('tree', x, y, False, '')
             if level02[y][x] == '1':
-                Tile('empty', x, y, False, '')
+                Tile('sand', x, y, False, '')
                 Tile('tree1', x, y, False, '')
             elif level02[y][x] == '#':
                 BlockTile('sand_wall', x, y)
             elif level02[y][x] == '$':
-                Tile('empty', x, y, True, (str(x) + str(y)))
+                Tile('sand', x, y, True, (str(x) + str(y)))
     global player
     global level_x
     global level_y
@@ -885,8 +863,8 @@ def level2():
                  (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
     apple = HealingApple(10, 10, 'apple.png', (70, 40))
 
-    for e in big_trees:  # Проходимся по массиву и создаём деревья
-        new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
+    #for e in big_trees:  # Проходимся по массиву и создаём деревья
+        #new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
     # группа, содержащая все спрайты
     all_sprites = pygame.sprite.Group()
     running = True
@@ -967,26 +945,13 @@ def level2():
         player_group.draw(screen)
         player.draw(screen)
         if player.health <= 0:
-            file = open('data/history_results.txt', 'r', encoding='utf-16')
-            text = file.readlines()
-            file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(f'{''.join(text)}\n'
-                       f'----------------------------------------------------\n'
-                       f'----------------------------------------------------\n'
-                       f'----------------------------------------------------\n'
-                       f'{str(datetime.datetime.now())}\n'
-                       f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                       f'Статус игры: Поражение')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
             player_group.draw(screen)
             player.can_move = False
             pygame.mixer.pause()
-            file = open('history_results.txt', 'w', encoding='utf-8')
-            file_check = open('history_results.txt', 'r', encoding='utf-8')
-            if file_check.readlines() == '':
-                file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
+            print(round(end_time / 1000 - 3, 1), 'секунд')
             end_screen()
             break
         clock.tick(FPS)
