@@ -2,7 +2,7 @@ import os
 import random
 import sys
 import time
-
+import datetime
 import pygame
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
@@ -25,6 +25,7 @@ start_menu_music = pygame.mixer.Sound("data/start_music.ogg")
 hero_death_music = pygame.mixer.Sound("data/hero_death.ogg")
 hero_death_sound = pygame.mixer.Sound("data/hero_death_sound.ogg")
 objects = []
+number_of_apples = 0
 
 left = False
 right = False
@@ -136,11 +137,28 @@ def start_screen():
                 return
             if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
+            if history_button.alreadyPressed:
+                history_screen()
+                return
+                # file = open('data/history_results.txt', 'r', encoding='utf-16')
+                # for line in file:
+                #     instructText = font.render(line, True, 'WHITE')
+                #     screen.blit(instructText,
+                #             ((400 - (instructText.get_width() / 2)), (300 - (instructText.get_height() / 2))))
         pygame.display.flip()
         clock.tick(FPS)
 
 
 start_screen()
+
+
+def history_screen():
+    start_menu_music.play(-1)
+    pygame.draw.rect(screen, (0, 0, 0, 255), (0, 0, width, height))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
 
 
 def load_level(filename):
@@ -318,6 +336,7 @@ class HealingApple(pygame.sprite.Sprite):
             tile_width * pos_x, tile_height * pos_y)
 
     def heal(self):
+        global number_of_apples
         if self.rect.colliderect(player.rect):
             k = 0
             eat_sound.play()
@@ -325,6 +344,7 @@ class HealingApple(pygame.sprite.Sprite):
                 if player.health < 100:
                     player.health += 1
                 k += 1
+            number_of_apples += 1
             self.kill()
 
 
@@ -619,7 +639,7 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 10
+                player.health -= 50
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -734,7 +754,7 @@ def level1():
             return
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                terminate()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 player.attack()
                 player.image = hero_Attack[2]
@@ -817,13 +837,22 @@ def level1():
             displayed_text = ''
         blit_text(screen, displayed_text, (490, 450), pygame.font.Font(None, 36))
         if player.health <= 0:
+            file = open('data/history_results.txt', 'r', encoding='utf-16')
+            text = file.readlines()
+            file = open('data/history_results.txt', 'w', encoding='utf-16')
+            file.write(f'{''.join(text)}\n'
+                       f'----------------------------------------------------\n'
+                       f'----------------------------------------------------\n'
+                       f'----------------------------------------------------\n'
+                       f'{str(datetime.datetime.now())}\n'
+                       f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+                       f'Статус игры: Поражение')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
             player_group.draw(screen)
             player.can_move = False
             pygame.mixer.pause()
-            print(round(end_time / 1000 - 3, 1), 'секунд')
             end_screen()
             break
         clock.tick(FPS)
@@ -938,13 +967,26 @@ def level2():
         player_group.draw(screen)
         player.draw(screen)
         if player.health <= 0:
+            file = open('data/history_results.txt', 'r', encoding='utf-16')
+            text = file.readlines()
+            file = open('data/history_results.txt', 'w', encoding='utf-16')
+            file.write(f'{''.join(text)}\n'
+                       f'----------------------------------------------------\n'
+                       f'----------------------------------------------------\n'
+                       f'----------------------------------------------------\n'
+                       f'{str(datetime.datetime.now())}\n'
+                       f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+                       f'Статус игры: Поражение')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
             player_group.draw(screen)
             player.can_move = False
             pygame.mixer.pause()
-            print(round(end_time / 1000 - 3, 1), 'секунд')
+            file = open('history_results.txt', 'w', encoding='utf-8')
+            file_check = open('history_results.txt', 'r', encoding='utf-8')
+            if file_check.readlines() == '':
+                file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
             end_screen()
             break
         clock.tick(FPS)
