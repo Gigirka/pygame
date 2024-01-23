@@ -105,6 +105,7 @@ def terminate():
 
 fon = pygame.transform.scale(load_image('fon.jpg'), (size))
 
+
 def win_screeen():
     pygame.mixer.pause()
     pygame.draw.rect(fon, (255, 130, 0, 65), (0, 0, width, height))
@@ -117,6 +118,8 @@ def win_screeen():
                 terminate()
         pygame.display.flip()
         clock.tick(FPS)
+
+
 def end_screen():
     hero_death_music.play()
     hero_death_sound.play()
@@ -159,7 +162,6 @@ def start_screen():
 
 
 start_screen()
-
 
 
 def load_level(filename):
@@ -238,6 +240,16 @@ enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_008.png'), (enemy_size)),
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_009.png'), (enemy_size)),
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (enemy_size))]
+
+enemy1_size = 220, 220
+
+enemy1Attack = []
+for i in range(69, 58, -1):
+    enemy1Attack.append(pygame.transform.scale(load_image(f'SandEnemy/Attack/image_part_0{i}.png'), (enemy1_size)))
+
+enemy1Stand = []
+for i in range(15, 24):
+    enemy1Stand.append(pygame.transform.scale(load_image(f'SandEnemy/Idle/image_part_0{i}.png'), (enemy1_size)))
 
 tile_width = tile_height = 50
 
@@ -600,30 +612,34 @@ class Player(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, str_key):  # str_key - массив с координатами нужных дверей
+    def __init__(self, pos_x, pos_y, str_key, type):  # str_key - массив с координатами нужных дверей
         super().__init__(enemy_group, all_sprites)
+        images = None
         self.make_check = True  # проверять ли двери после смерти (для оптимизации)
         self.str_key_block = str_key
         self.move = False
         self.health = 100
         self.can_attack = False
-        images = enemyAttack + enemyStand
-        self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
-        self.images = images
-        self.images_attack = images[0:8]
-        self.images_idle = images[10:16]
+        if type == 0:  # Проверяем тип врага
+            images = enemyAttack + enemyStand
+            self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
+            self.images = images
+            self.images_attack = images[0:8]
+            self.images_idle = images[10:16]
+        elif type == 1:  # Проверяем тип врага
+            images = enemy1Attack + enemy1Stand
+            self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
+            self.images = images
+            self.images_attack = images[0:11]
+            self.images_idle = images[11:20]
         self.index = 0
         self.last_attack_time = 0
 
         self.image = pygame.transform.scale(images[self.index],
-                                            (5, 5))  # 'image' is the current image of the animation.
-        # Переопределяем координаты коллизии
-
+                                            (5, 5))
         self.animation_time = 0.05
         self.current_time = 0
-
         self.timee = 0
-
         self.animation_frames = 6
         self.current_frame = 0
 
@@ -823,18 +839,18 @@ def level1():
     sign_rect = sign_image.get_rect(center=(700, 500))
 
     text0 = ("""Привет, незнакомец! Ты попал 
-    в лабиринт, который находится 
-    вне времени и пространства...""")
+в лабиринт, который находится 
+вне времени и пространства...""")
     text1 = ("""Чтобы выйти отсюда, тебе 
-    придётся устранить 
-    босса...""")
+придётся устранить 
+босса...""")
     text2 = ("""Однако к нему не так
-    просто подобраться: тебя
-    встретит его охрана""")
+просто подобраться: тебя
+встретит его охрана""")
     displayed_text = ""
     counter = 0
     counter_text = 0
-    while running:
+    while running and level1on:
         dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
         if portal.rect.colliderect(player.rect):
             portal_group.empty()
@@ -974,15 +990,15 @@ def level2():
     global level_x
     global level_y
     black_l = Black(0, 0)
-    enemy1 = Enemy(480, 110, (134, 135))
-    enemy2 = Enemy(1100, 160, (255, 256))
+    enemy1 = Enemy(480, 65, (134, 135), 1)
+    enemy2 = Enemy(1100, 160, (255, 256), 1)
     boss = Boss(300, 400, (255, 256))
     big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
                  (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
     apple = HealingApple(10, 10, 'apple.png', (70, 40))
 
-    #for e in big_trees:  # Проходимся по массиву и создаём деревья
-        #new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
+    # for e in big_trees:  # Проходимся по массиву и создаём деревья
+    # new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
     # группа, содержащая все спрайты
     all_sprites = pygame.sprite.Group()
     running = True
@@ -1082,13 +1098,13 @@ def level2():
             text = file.readlines()
             file = open('data/history_results.txt', 'w', encoding='utf-16')
             file.write(
-                       f'----------------------------------------------------\n'
-                       f'----------------------------------------------------\n'
-                       f'----------------------------------------------------\n'
-                       f'{str(datetime.datetime.now())}\n'
-                       f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                       f'Статус игры: Поражение\n'
-                        f'{''.join(text)}')
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'{str(datetime.datetime.now())}\n'
+                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+                f'Статус игры: Поражение\n'
+                f'{''.join(text)}')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
@@ -1115,8 +1131,8 @@ portal_group = pygame.sprite.Group()
 block_tiles_group = pygame.sprite.Group()
 healing_apples_group = pygame.sprite.Group()
 black_l = Black(0, 0)
-enemy1 = Enemy(480, 110, (134, 135))
-enemy2 = Enemy(1100, 160, (255, 256))
+enemy1 = Enemy(480, 110, (134, 135), 0)
+enemy2 = Enemy(1100, 160, (255, 256), 0)
 bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
 big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
@@ -1131,4 +1147,4 @@ player, level_x, level_y = generate_level(load_level('map1.txt'))
 level2()
 pygame.quit()
 
-#54
+# 54

@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Исправил некоторые баги">
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Пустыня">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/history_results.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_results.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/history_results.txt" beforeDir="false" afterPath="$PROJECT_DIR$/history_results.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +26,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -49,15 +53,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.123.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/mrtob/PycharmProjects/pygame1/data"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.123.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/mrtob/PycharmProjects/pygame1/data&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\mrtob\PycharmProjects\pygame1\data" />
@@ -276,7 +280,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705932807840</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Пустыня">
+      <option name="closed" value="true" />
+      <created>1705933156988</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1705933156988</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -321,6 +333,7 @@
     <MESSAGE value="Убрал табличку с текстом" />
     <MESSAGE value="Убрал звук метели на втором уровне + заменил стены" />
     <MESSAGE value="Исправил некоторые баги" />
-    <option name="LAST_COMMIT_MESSAGE" value="Исправил некоторые баги" />
+    <MESSAGE value="Пустыня" />
+    <option name="LAST_COMMIT_MESSAGE" value="Пустыня" />
   </component>
 </project>
