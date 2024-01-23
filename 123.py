@@ -109,9 +109,10 @@ fon = pygame.transform.scale(load_image('fon.jpg'), (size))
 def win_screeen():
     pygame.mixer.pause()
     pygame.draw.rect(fon, (255, 130, 0, 65), (0, 0, width, height))
-    screen.blit(fon, (0, 0))
     blit_text(screen, 'ВЫ  ПРОШЛИ  ИГРУ!', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
               color=pygame.Color('black'))
+    exit_button1 = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
+    screen.blit(screen, (0, 0))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -123,14 +124,23 @@ def win_screeen():
 def end_screen():
     hero_death_music.play()
     hero_death_sound.play()
+    screen.blit(screen, (0, 0))
     pygame.draw.rect(fon, (255, 0, 0, 65), (0, 0, width, height))
     screen.blit(fon, (0, 0))
     blit_text(screen, 'GAME     OVER', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
               color=pygame.Color('black'))
+    start_button1 = Button(width / 2 - 150, height / 5, 300, 75, 'Заново', call_func1)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
+        for elem in objects:  # Отображаем кнопки на экране
+            elem.process()
+            if start_button1.alreadyPressed:  # Функция кнопки старт
+                wind_sound.set_volume(0.5)
+                wind_sound.play(-1)
+                start_menu_music.stop()
+                return
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -246,10 +256,18 @@ enemy1_size = 220, 220
 enemy1Attack = []
 for i in range(69, 58, -1):
     enemy1Attack.append(pygame.transform.scale(load_image(f'SandEnemy/Attack/image_part_0{i}.png'), (enemy1_size)))
-
 enemy1Stand = []
 for i in range(15, 24):
     enemy1Stand.append(pygame.transform.scale(load_image(f'SandEnemy/Idle/image_part_0{i}.png'), (enemy1_size)))
+boss_size = 340, 280
+boss_images = []
+for i in range(1, 21):
+    if i < 16:
+        boss_images.append(
+            pygame.transform.scale(load_image(f'boss_demon/individual sprites/demon_cleave_{i}.png'), (boss_size)))
+    else:
+        boss_images.append(
+            pygame.transform.scale(load_image(f'boss_demon/individual sprites/demon_idle_{i}.png'), (boss_size)))
 
 tile_width = tile_height = 50
 
@@ -631,7 +649,7 @@ class Enemy(pygame.sprite.Sprite):
             self.rect = pygame.Rect((pos_x, pos_y), (160, 160))
             self.images = images
             self.images_attack = images[0:11]
-            self.images_idle = images[11:20]
+            self.images_idle = images[12:20]
         self.index = 0
         self.last_attack_time = 0
 
@@ -661,7 +679,7 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 10
+                player.health -= 20
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -710,14 +728,13 @@ class Boss(pygame.sprite.Sprite):
         self.move = False
         self.health = 300
         self.can_attack = False
-        images = enemyAttack + enemyStand
-        self.rect = pygame.Rect((pos_x, pos_y), (480, 480))
+        images = boss_images
+        self.rect = pygame.Rect((pos_x, pos_y), (160, 260))
         self.images = images
-        self.images_attack = images[0:8]
-        self.images_idle = images[10:16]
+        self.images_attack = images[0:15]
+        self.images_idle = images[15:22]
         self.index = 0
         self.last_attack_time = 0
-
         self.image = pygame.transform.scale(images[self.index],
                                             (5, 5))  # 'image' is the current image of the animation.
         # Переопределяем координаты коллизии
@@ -968,7 +985,16 @@ def level1():
         pygame.display.flip()
 
 
+portal_created = False
+
+
 def level2():
+    def create_portal():
+        global portal_created
+        if not portal_created:
+            portal2 = Portal(35, 5, portal_img, (50, 80))
+        portal_created = True
+
     global level1on
     level1on = False
     wind_sound.stop()
@@ -992,7 +1018,7 @@ def level2():
     black_l = Black(0, 0)
     enemy1 = Enemy(480, 65, (134, 135), 1)
     enemy2 = Enemy(1100, 160, (255, 256), 1)
-    boss = Boss(300, 400, (255, 256))
+    boss = Boss(1900, 70, (0, 0))
     big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
                  (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
     apple = HealingApple(10, 10, 'apple.png', (70, 40))
@@ -1005,6 +1031,29 @@ def level2():
     clock = pygame.time.Clock()
     while running:
         dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
+        if portal.rect.colliderect(player.rect):
+            portal_group.empty()
+            tiles_group.empty()
+            enemy_group.empty()
+            decor_group.empty()
+            player_group.empty()
+            healing_apples_group.empty()
+            block_tiles_group.empty()
+            file = open('data/history_results.txt', 'r', encoding='utf-16')
+            text = file.readlines()
+            file = open('data/history_results.txt', 'w', encoding='utf-16')
+            file.write(
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'{str(datetime.datetime.now())}\n'
+                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+                f'Статус игры: Победа\n'
+                f'{''.join(text)}')
+            win_screeen()
+            pygame.mixer.pause()
+            break
+            return
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -1079,20 +1128,7 @@ def level2():
         player_group.draw(screen)
         player.draw(screen)
         if boss.health <= 0:
-            file = open('data/history_results.txt', 'r', encoding='utf-16')
-            text = file.readlines()
-            file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'{str(datetime.datetime.now())}\n'
-                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                f'Статус игры: Победа\n'
-                f'{''.join(text)}')
-            win_screeen()
-            pygame.mixer.pause()
-            break
+            create_portal()
         if player.health <= 0:
             file = open('data/history_results.txt', 'r', encoding='utf-16')
             text = file.readlines()
