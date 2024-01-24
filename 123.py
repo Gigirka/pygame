@@ -119,11 +119,10 @@ def win_screen():
     blit_text(screen, 'ВЫ ПРОШЛИ ИГРУ!', (width // 2 - 400, height // 2 - 200), pygame.font.Font(None, 150),
               color=pygame.Color('white'))
     blit_text(screen,
-              f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-              f'Статус игры: Победа\n'
-              f'Убито врагов: {kills}\n'
-              f'Съедено яблок: {number_of_apples}', (width // 2 - 500, height // 2 + 15),
-              pygame.font.Font(None, 50),
+              f'''Время в игре: {round(end_time / 1000 - 3, 1)} секунд
+Убито врагов: {kills}
+Съедено яблок: {number_of_apples}''', (width // 2 - 40, height // 2 - 90 ),
+              pygame.font.Font(None, 40),
               color=pygame.Color('white'))
     file = open('data/history_results.txt', 'r', encoding='utf-16')
     text = file.readlines()
