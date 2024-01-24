@@ -239,6 +239,28 @@ enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_009.png'), (enemy_size)),
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (enemy_size))]
 
+boss_size = 800, 800
+bossAttack = [pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_008.png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_007.png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_006.png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_005.png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004.png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_004 (1).png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_003.png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_002.png'), (boss_size)),
+               pygame.transform.scale(load_image('Fantasy Warrior/attack/image_part_001.png'), (boss_size))]
+
+bossStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_001.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_002.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_003.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_004.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_005.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_006.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_007.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_008.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_009.png'), (boss_size)),
+              pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (boss_size))]
+
 tile_width = tile_height = 50
 
 
@@ -694,8 +716,8 @@ class Boss(pygame.sprite.Sprite):
         self.move = False
         self.health = 300
         self.can_attack = False
-        images = enemyAttack + enemyStand
-        self.rect = pygame.Rect((pos_x, pos_y), (480, 480))
+        images = bossAttack + bossStand
+        self.rect = pygame.Rect((pos_x, pos_y), (800, 800))
         self.images = images
         self.images_attack = images[0:8]
         self.images_idle = images[10:16]
@@ -732,7 +754,7 @@ class Boss(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 10
+                player.health -= 20
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -740,9 +762,9 @@ class Boss(pygame.sprite.Sprite):
             self.health = 0
         BAR_LENGTH_1 = 100
         BAR_HEIGHT_1 = 15
-        fill_1 = (self.health / 100) * BAR_LENGTH_1
-        outline_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, BAR_LENGTH_1, BAR_HEIGHT_1)
-        fill_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, fill_1, BAR_HEIGHT_1)
+        fill_1 = (self.health / 300) * BAR_LENGTH_1
+        outline_rect_1 = pygame.Rect(self.rect.x + 400, self.rect.y + 230, BAR_LENGTH_1, BAR_HEIGHT_1)
+        fill_rect_1 = pygame.Rect(self.rect.x + 400, self.rect.y + 230, fill_1, BAR_HEIGHT_1)
         if self.health >= 50:
             pygame.draw.rect(surf, 'green', fill_rect_1)
         else:
@@ -973,10 +995,11 @@ def level2():
     global player
     global level_x
     global level_y
+    portal2 = Portal(1000, 300, portal_img, (50, 80))
     black_l = Black(0, 0)
     enemy1 = Enemy(480, 110, (134, 135))
     enemy2 = Enemy(1100, 160, (255, 256))
-    boss = Boss(300, 400, (255, 256))
+    boss = Boss(1100, 250, (255, 256))
     big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
                  (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
     apple = HealingApple(10, 10, 'apple.png', (70, 40))
@@ -1063,20 +1086,24 @@ def level2():
         player_group.draw(screen)
         player.draw(screen)
         if boss.health <= 0:
-            file = open('data/history_results.txt', 'r', encoding='utf-16')
-            text = file.readlines()
-            file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'{str(datetime.datetime.now())}\n'
-                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                f'Статус игры: Победа\n'
-                f'{''.join(text)}')
-            win_screeen()
-            pygame.mixer.pause()
-            break
+            portal2 = Portal(1100, 300, portal_img, (50, 80))
+            portal2.update(dt)
+            portal_group.draw(screen)
+            if player.rect.colliderect(portal2):
+                file = open('data/history_results.txt', 'r', encoding='utf-16')
+                text = file.readlines()
+                file = open('data/history_results.txt', 'w', encoding='utf-16')
+                file.write(
+                    f'----------------------------------------------------\n'
+                    f'----------------------------------------------------\n'
+                    f'----------------------------------------------------\n'
+                    f'{str(datetime.datetime.now())}\n'
+                    f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+                    f'Статус игры: Победа\n'
+                    f'{''.join(text)}')
+                win_screeen()
+                pygame.mixer.pause()
+                break
         if player.health <= 0:
             file = open('data/history_results.txt', 'r', encoding='utf-16')
             text = file.readlines()
@@ -1130,5 +1157,3 @@ level1()
 player, level_x, level_y = generate_level(load_level('map1.txt'))
 level2()
 pygame.quit()
-
-#54
