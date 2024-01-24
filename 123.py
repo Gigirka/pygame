@@ -24,6 +24,8 @@ eat_sound = pygame.mixer.Sound("data/eat.wav")
 start_menu_music = pygame.mixer.Sound("data/start_music.ogg")
 hero_death_music = pygame.mixer.Sound("data/hero_death.ogg")
 hero_death_sound = pygame.mixer.Sound("data/hero_death_sound.ogg")
+victory_sound = pygame.mixer.Sound("data/victory.ogg")
+hit_sound = pygame.mixer.Sound("data/hit.ogg")
 objects = []
 number_of_apples = 0
 
@@ -108,17 +110,34 @@ fon = pygame.transform.scale(load_image('fon.jpg'), (size))
 
 def win_screen():
     global kills
-    hero_death_music.play()
-    hero_death_sound.play()
+    global start_time
+    global end_time
+    victory_sound.play()
     screen.blit(screen, (0, 0))
     pygame.draw.rect(fon, (255, 130, 0, 65), (0, 0, width, height))
     screen.blit(fon, (0, 0))
     blit_text(screen, 'ВЫ ПРОШЛИ ИГРУ!', (width // 2 - 400, height // 2 - 200), pygame.font.Font(None, 150),
               color=pygame.Color('white'))
-    blit_text(screen, f'''Убито {kills} врагов'
-Съедено {number_of_apples} яблок''', (width // 2 - 400, height // 2),
+    blit_text(screen,
+              f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+              f'Статус игры: Победа\n'
+              f'Убито врагов: {kills}\n'
+              f'Съедено яблок: {number_of_apples}', (width // 2 - 500, height // 2 + 15),
               pygame.font.Font(None, 50),
               color=pygame.Color('white'))
+    file = open('data/history_results.txt', 'r', encoding='utf-16')
+    text = file.readlines()
+    file = open('data/history_results.txt', 'w', encoding='utf-16')
+    file.write(
+        f'----------------------------------------------------\n'
+        f'----------------------------------------------------\n'
+        f'----------------------------------------------------\n'
+        f'{str(datetime.datetime.now())}\n'
+        f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+        f'Статус игры: Победа\n'
+        f'Убито врагов: {kills}\n'
+        f'Съедено яблок:{number_of_apples}\n'
+        f'{''.join(text)}')
     objects.remove(start_button)
     while True:
         for event in pygame.event.get():
@@ -140,7 +159,27 @@ def end_screen():
     screen.blit(fon, (0, 0))
     blit_text(screen, 'GAME     OVER', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
               color=pygame.Color('black'))
+    blit_text(screen,
+              f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+              f'Статус игры: Поражение\n'
+              f'Убито врагов: {kills}\n'
+              f'Съедено яблок: {number_of_apples}', (width // 2 - 500, height // 2 + 15),
+              pygame.font.Font(None, 50),
+              color=pygame.Color('black'))
     objects.remove(start_button)
+    file = open('data/history_results.txt', 'r', encoding='utf-16')
+    text = file.readlines()
+    file = open('data/history_results.txt', 'w', encoding='utf-16')
+    file.write(
+        f'----------------------------------------------------\n'
+        f'----------------------------------------------------\n'
+        f'----------------------------------------------------\n'
+        f'{str(datetime.datetime.now())}\n'
+        f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+        f'Статус игры: Поражение\n'
+        f'Убито врагов: {kills}\n'
+        f'Съедено яблок: {number_of_apples}\n'
+        f'{''.join(text)}')
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -430,6 +469,7 @@ class Player(pygame.sprite.Sprite):
         enemies = pygame.sprite.spritecollide(self, enemy_group, False)
         for enemy in enemies:
             enemy.health -= 50
+            hit_sound.play()
 
     def update_time_dependent(self, dt):
         if self.health <= 0:
@@ -789,7 +829,7 @@ class Boss(pygame.sprite.Sprite):
         BAR_HEIGHT_1 = 15
         fill_1 = (self.health / 100) * BAR_LENGTH_1
         outline_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, BAR_LENGTH_1, BAR_HEIGHT_1)
-        fill_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, fill_1, BAR_HEIGHT_1)
+        fill_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, fill_1 / 3, BAR_HEIGHT_1)
         if self.health >= 50:
             pygame.draw.rect(surf, 'green', fill_rect_1)
         else:
@@ -1009,6 +1049,7 @@ portal_created = False
 
 
 def level2():
+    global end_time
     portal2 = Portal(43, 5, portal_img, (50, 80))
     global level1on
     level1on = False
@@ -1127,53 +1168,50 @@ def level2():
             portal2.my_alpha = 255
 
         if player.health <= 0:
-            file = open('data/history_results.txt', 'r', encoding='utf-16')
-            text = file.readlines()
-            file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'{str(datetime.datetime.now())}\n'
-                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                f'Статус игры: Поражение\n'
-                f'Убито {kills} врагов\n'
-                f'Съедено {number_of_apples} яблок\n'
-                f'{''.join(text)}')
+            # file = open('data/history_results.txt', 'r', encoding='utf-16')
+            # text = file.readlines()
+            # file = open('data/history_results.txt', 'w', encoding='utf-16')
+            # file.write(
+            #     f'----------------------------------------------------\n'
+            #     f'----------------------------------------------------\n'
+            #     f'----------------------------------------------------\n'
+            #     f'{str(datetime.datetime.now())}\n'
+            #     f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+            #     f'Статус игры: Поражение\n'
+            #     f'Убито {kills} врагов\n'
+            #     f'Съедено {number_of_apples} яблок\n'
+            #     f'{''.join(text)}')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
             player_group.draw(screen)
             player.can_move = False
             pygame.mixer.pause()
-            file = open('history_results.txt', 'w', encoding='utf-8')
-            file_check = open('history_results.txt', 'r', encoding='utf-8')
-            if file_check.readlines() == '':
-                file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
             end_screen()
             break
 
         if portal2.rect.colliderect(player.rect) and boss_killed:
-            file = open('data/history_results.txt', 'r', encoding='utf-16')
-            text = file.readlines()
-            file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'{str(datetime.datetime.now())}\n'
-                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                f'Статус игры: Победа\n'
-                f'Убито врагов: {kills} \n'
-                f'Съедено яблок: {number_of_apples} \n'
-                f'{''.join(text)}')
+            # file = open('data/history_results.txt', 'r', encoding='utf-16')
+            # text = file.readlines()
+            # file = open('data/history_results.txt', 'w', encoding='utf-16')
+            # file.write(
+            #     f'----------------------------------------------------\n'
+            #     f'----------------------------------------------------\n'
+            #     f'----------------------------------------------------\n'
+            #     f'{str(datetime.datetime.now())}\n'
+            #     f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+            #     f'Статус игры: Победа\n'
+            #     f'Убито врагов: {kills} \n'
+            #     f'Съедено яблок: {number_of_apples} \n'
+            #     f'{''.join(text)}')
             player_group.draw(screen)
             player.can_move = False
             pygame.mixer.pause()
-            file = open('history_results.txt', 'w', encoding='utf-8')
-            file_check = open('history_results.txt', 'r', encoding='utf-8')
-            if file_check.readlines() == '':
-                file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
+            # file = open('history_results.txt', 'w', encoding='utf-8')
+            # file_check = open('history_results.txt', 'r', encoding='utf-8')
+            # if file_check.readlines() == '':
+            #     file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
+            end_time = pygame.time.get_ticks()
             win_screen()
             break
 
