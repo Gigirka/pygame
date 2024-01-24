@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Убрал звук метели на втором уровне + заменил стены">
+    <list default="true" id="f9fb19cb-8961-42ec-aedf-07511603c74d" name="Changes" comment="Обновил победный экран">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/123.py" beforeDir="false" afterPath="$PROJECT_DIR$/123.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/history_results.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/history_results.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/map1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/map1.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,7 +273,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705923948825</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Обновил победный экран">
+      <option name="closed" value="true" />
+      <created>1706123917475</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1706123917475</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -315,6 +325,7 @@
     <MESSAGE value="Добавил переход на второй уровень" />
     <MESSAGE value="Убрал табличку с текстом" />
     <MESSAGE value="Убрал звук метели на втором уровне + заменил стены" />
-    <option name="LAST_COMMIT_MESSAGE" value="Убрал звук метели на втором уровне + заменил стены" />
+    <MESSAGE value="Обновил победный экран" />
+    <option name="LAST_COMMIT_MESSAGE" value="Обновил победный экран" />
   </component>
 </project>

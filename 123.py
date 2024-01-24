@@ -1,7 +1,5 @@
 import os
-import random
 import sys
-import time
 import datetime
 import pygame
 
@@ -83,7 +81,7 @@ def call_func3():
     return
 
 
-start_button = Button(width / 2 - 150, height / 5, 300, 75, 'Старт!', call_func1)
+start_button = Button(width / 2 - 150, height / 3.5, 300, 75, 'Старт!', call_func1)
 # history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
 exit_button = Button(width / 2 - 150, height / 5 + 2.2 * height / 5, 300, 75, 'Выйти', call_func3)
 
@@ -160,9 +158,8 @@ def end_screen():
               color=pygame.Color('black'))
     blit_text(screen,
               f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-              f'Статус игры: Поражение\n'
               f'Убито врагов: {kills}\n'
-              f'Съедено яблок: {number_of_apples}', (width // 2 - 500, height // 2 + 15),
+              f'Съедено яблок: {number_of_apples}', (width // 2 - 500, 20),
               pygame.font.Font(None, 50),
               color=pygame.Color('black'))
     objects.remove(start_button)
@@ -467,7 +464,7 @@ class Player(pygame.sprite.Sprite):
         # self.images = hero_Attack
         enemies = pygame.sprite.spritecollide(self, enemy_group, False)
         for enemy in enemies:
-            enemy.health -= 50
+            enemy.health -= 5
             hit_sound.play()
 
     def update_time_dependent(self, dt):
@@ -476,9 +473,9 @@ class Player(pygame.sprite.Sprite):
             self.index = 0
             self.image = self.images[0]
         else:
-            if self.vx < 0 or self.vy > 0 and self.health != 0:  # Use the right images if sprite is moving right.
+            if self.vx < 0 and self.health != 0:  # Use the right images if sprite is moving right.
                 self.images = self.images_right
-            elif self.vx > 0 or self.vy < 0 and self.health != 0:
+            elif self.vx > 0 or self.vy > 0 or self.vy < 0 and self.health != 0:
                 self.images = self.images_left
             elif self.vx == 0 and self.vy == 0 and self.health != 0:
                 self.images = self.images_stop
@@ -730,7 +727,7 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 20
+                player.health -= 25
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -758,7 +755,7 @@ class Enemy(pygame.sprite.Sprite):
             self.can_attack = True
         else:
             self.can_attack = False
-        if self.health == 0 and self.make_check:
+        if self.health <= 0 and self.make_check:
             for x_y_key in self.str_key_block:
                 for block in tiles_group:
                     if block.anim_work == True:
@@ -818,7 +815,7 @@ class Boss(pygame.sprite.Sprite):
             self.image = self.images[self.index]
             if self.image == self.images_attack[0]:
                 self.last_attack_time = self.timee
-                player.health -= 10
+                player.health -= 20
                 enemy_punch_sound.play()
 
     def draw(self, surf):
@@ -888,6 +885,9 @@ def generate_level(level):
             if level[y][x] == '!':
                 Tile('empty', x, y, False, '')
                 Tile('tree', x, y, False, '')
+            if level[y][x] == '2':
+                Tile('empty', x, y, False, '')
+                apple = HealingApple(x, y, 'apple.png', (70, 40))
             if level[y][x] == '1':
                 Tile('empty', x, y, False, '')
                 Tile('tree1', x, y, False, '')
@@ -925,7 +925,7 @@ def level1():
     counter = 0
     counter_text = 0
     while running and level1on:
-        dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
+        dt = clock.tick(FPS) / 1000
         if portal.rect.colliderect(player.rect):
             portal_group.empty()
             tiles_group.empty()
@@ -943,25 +943,25 @@ def level1():
                 player.image = hero_Attack[2]
             if event.type == pygame.KEYDOWN and player.can_move:
                 player.move = True
-                if event.key == pygame.K_s:
+                if event.key == pygame.K_e:
                     player.attack()
                     player.image = hero_Attack[2]
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_a:
                     step_sound.play(-1)
                     player.vx = -8
                     left = True
                     right = False
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_d:
                     step_sound.play(-1)
                     player.vx = 8
                     left = False
                     right = True
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_w:
                     step_sound.play(-1)
                     player.vy = -8
                     left = False
                     right = True
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_s:
                     step_sound.play(-1)
                     player.vy = 8
                     left = False
@@ -973,9 +973,9 @@ def level1():
             if event.type == pygame.KEYUP:
                 step_sound.stop()
                 player.move = False
-                if event.key in [pygame.K_LEFT, pygame.K_RIGHT]:
+                if event.key in [pygame.K_a, pygame.K_d]:
                     player.vx = 0
-                elif event.key in [pygame.K_UP, pygame.K_DOWN]:
+                elif event.key in [pygame.K_w, pygame.K_s]:
                     player.vy = 0
 
         all_sprites.update(dt)
@@ -1053,13 +1053,16 @@ def level2():
     global level1on
     level1on = False
     wind_sound.stop()
-    for y in range(len(level)):
+    for y in range(len(level02)):
         for x in range(len(level02[y])):
             if level02[y][x] == '.':
                 Tile('sand', x, y, False, '')
             if level02[y][x] == '!':
                 Tile('sand', x, y, False, '')
                 Tile('tree', x, y, False, '')
+            if level02[y][x] == '2':
+                Tile('sand', x, y, False, '')
+                apple = HealingApple(x, y, 'apple.png', (70, 40))
             if level02[y][x] == '1':
                 Tile('sand', x, y, False, '')
                 Tile('tree1', x, y, False, '')
@@ -1078,6 +1081,7 @@ def level2():
     black_l_sand = Black(0, 0)
     enemy_sand_1 = Enemy(480, 65, (133, 134), 1)
     enemy_sand_2 = Enemy(1100, 160, (255, 256), 1)
+    enemy_sand_3 = Enemy(1830, 520, (4012, 4013), 1)
     boss = Boss(1900, 70, (0, 0))
     big_sand_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
                       (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
@@ -1086,7 +1090,7 @@ def level2():
     running = True
     clock = pygame.time.Clock()
     while running:
-        dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
+        dt = clock.tick(FPS) / 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -1095,25 +1099,25 @@ def level2():
                 player.image = hero_Attack[2]
             if event.type == pygame.KEYDOWN and player.can_move:
                 player.move = True
-                if event.key == pygame.K_s:
+                if event.key == pygame.K_e:
                     player.attack()
                     player.image = hero_Attack[2]
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_a:
                     step_sound.play(-1)
                     player.vx = -8
                     left = True
                     right = False
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_d:
                     step_sound.play(-1)
                     player.vx = 8
                     left = False
                     right = True
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_w:
                     step_sound.play(-1)
                     player.vy = -8
                     left = False
                     right = True
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_s:
                     step_sound.play(-1)
                     player.vy = 8
                     left = False
@@ -1125,9 +1129,9 @@ def level2():
             if event.type == pygame.KEYUP:
                 step_sound.stop()
                 player.move = False
-                if event.key in [pygame.K_LEFT, pygame.K_RIGHT]:
+                if event.key in [pygame.K_a, pygame.K_d]:
                     player.vx = 0
-                elif event.key in [pygame.K_UP, pygame.K_DOWN]:
+                elif event.key in [pygame.K_w, pygame.K_s]:
                     player.vy = 0
 
         all_sprites.update(dt)
@@ -1167,19 +1171,6 @@ def level2():
             portal2.my_alpha = 255
 
         if player.health <= 0:
-            # file = open('data/history_results.txt', 'r', encoding='utf-16')
-            # text = file.readlines()
-            # file = open('data/history_results.txt', 'w', encoding='utf-16')
-            # file.write(
-            #     f'----------------------------------------------------\n'
-            #     f'----------------------------------------------------\n'
-            #     f'----------------------------------------------------\n'
-            #     f'{str(datetime.datetime.now())}\n'
-            #     f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-            #     f'Статус игры: Поражение\n'
-            #     f'Убито {kills} врагов\n'
-            #     f'Съедено {number_of_apples} яблок\n'
-            #     f'{''.join(text)}')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
@@ -1190,26 +1181,9 @@ def level2():
             break
 
         if portal2.rect.colliderect(player.rect) and boss_killed:
-            # file = open('data/history_results.txt', 'r', encoding='utf-16')
-            # text = file.readlines()
-            # file = open('data/history_results.txt', 'w', encoding='utf-16')
-            # file.write(
-            #     f'----------------------------------------------------\n'
-            #     f'----------------------------------------------------\n'
-            #     f'----------------------------------------------------\n'
-            #     f'{str(datetime.datetime.now())}\n'
-            #     f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-            #     f'Статус игры: Победа\n'
-            #     f'Убито врагов: {kills} \n'
-            #     f'Съедено яблок: {number_of_apples} \n'
-            #     f'{''.join(text)}')
             player_group.draw(screen)
             player.can_move = False
             pygame.mixer.pause()
-            # file = open('history_results.txt', 'w', encoding='utf-8')
-            # file_check = open('history_results.txt', 'r', encoding='utf-8')
-            # if file_check.readlines() == '':
-            #     file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
             end_time = pygame.time.get_ticks()
             win_screen()
             break
@@ -1229,12 +1203,13 @@ block_tiles_group = pygame.sprite.Group()
 healing_apples_group = pygame.sprite.Group()
 black_l = Black(0, 0)
 enemy1 = Enemy(480, 110, (134, 135), 0)
-enemy2 = Enemy(1100, 160, (255, 256), 0)
+enemy2 = Enemy(1050, 160, (255, 256), 0)
+enemy3 = Enemy(1100, 400, (2610, 2611), 0)
+enemy3 = Enemy(1400, 255, (327, 328), 0)
 bonfire = DecorCreate(4, 3, 'bonfire.png', (80, 80))
 house = DecorCreate(8.3, 0.5, 'wooden_house.png', (120, 120))
 big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
              (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
-apple = HealingApple(7, 5, 'apple.png', (70, 40))
 portal = Portal(35, 8, portal_img, (50, 80))
 for e in big_trees:  # Проходимся по массиву и создаём деревья
     new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
