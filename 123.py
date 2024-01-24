@@ -83,7 +83,7 @@ def call_func3():
 
 start_button = Button(width / 2 - 150, height / 5, 300, 75, 'Старт!', call_func1)
 # history_button = Button(width / 2 - 150, height / 5 + height / 5, 300, 75, 'История', call_func2)
-exit_button = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
+exit_button = Button(width / 2 - 150, height / 5 + 2.2 * height / 5, 300, 75, 'Выйти', call_func3)
 
 
 # Конец кода с кнопками
@@ -106,16 +106,27 @@ def terminate():
 fon = pygame.transform.scale(load_image('fon.jpg'), (size))
 
 
-def win_screeen():
-    pygame.mixer.pause()
-    pygame.draw.rect(fon, (255, 130, 0, 65), (0, 0, width, height))
-    blit_text(screen, 'ВЫ  ПРОШЛИ  ИГРУ!', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
-              color=pygame.Color('black'))
-    exit_button1 = Button(width / 2 - 150, height / 5 + 2 * height / 5, 300, 75, 'Выйти', call_func3)
+def win_screen():
+    global kills
+    hero_death_music.play()
+    hero_death_sound.play()
     screen.blit(screen, (0, 0))
+    pygame.draw.rect(fon, (255, 130, 0, 65), (0, 0, width, height))
+    screen.blit(fon, (0, 0))
+    blit_text(screen, 'ВЫ ПРОШЛИ ИГРУ!', (width // 2 - 400, height // 2 - 200), pygame.font.Font(None, 150),
+              color=pygame.Color('white'))
+    blit_text(screen, f'''Убито {kills} врагов'
+Съедено {number_of_apples} яблок''', (width // 2 - 400, height // 2),
+              pygame.font.Font(None, 50),
+              color=pygame.Color('white'))
+    objects.remove(start_button)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                terminate()
+        for elem in objects:  # Отображаем кнопки на экране
+            elem.process()
+            if exit_button.alreadyPressed:  # Функция кнопки выйти
                 terminate()
         pygame.display.flip()
         clock.tick(FPS)
@@ -129,18 +140,16 @@ def end_screen():
     screen.blit(fon, (0, 0))
     blit_text(screen, 'GAME     OVER', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
               color=pygame.Color('black'))
-    start_button1 = Button(width / 2 - 150, height / 5, 300, 75, 'Заново', call_func1)
+    objects.remove(start_button)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
         for elem in objects:  # Отображаем кнопки на экране
             elem.process()
-            if start_button1.alreadyPressed:  # Функция кнопки старт
-                wind_sound.set_volume(0.5)
-                wind_sound.play(-1)
-                start_menu_music.stop()
-                return
+            if exit_button.alreadyPressed:  # Функция кнопки выйти
+                terminate()
+
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -171,6 +180,7 @@ def start_screen():
         clock.tick(FPS)
 
 
+kills = 0
 start_screen()
 
 
@@ -252,14 +262,14 @@ enemyStand = [pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part
               pygame.transform.scale(load_image('Fantasy Warrior/idle/image_part_010.png'), (enemy_size))]
 
 enemy1_size = 220, 220
-
+boss_killed = False
 enemy1Attack = []
 for i in range(69, 58, -1):
     enemy1Attack.append(pygame.transform.scale(load_image(f'SandEnemy/Attack/image_part_0{i}.png'), (enemy1_size)))
 enemy1Stand = []
 for i in range(15, 24):
     enemy1Stand.append(pygame.transform.scale(load_image(f'SandEnemy/Idle/image_part_0{i}.png'), (enemy1_size)))
-boss_size = 340, 280
+boss_size = 360, 280
 boss_images = []
 for i in range(1, 21):
     if i < 16:
@@ -285,6 +295,7 @@ class Portal(pygame.sprite.Sprite):
         super().__init__(portal_group, all_sprites)
         self.images = portal_img
         self.index = 0
+        self.my_alpha = 0
         self.image = pygame.transform.scale(portal_img[self.index],
                                             (50, 80))  # 'image' is the current image of the animation.
         self.rect = self.image.get_rect().move(
@@ -315,8 +326,9 @@ class Tile(pygame.sprite.Sprite):
             self.index = 0
             self.image = pygame.transform.scale(blocks[self.index],
                                                 (90, 90))  # 'image' is the current image of the animation.
+
             self.rect = self.image.get_rect().move(
-                tile_width * pos_x + 15, tile_height * pos_y)
+                tile_width * pos_x, tile_height * pos_y)
 
             self.animation_time = 0.05
             self.current_time = 0
@@ -700,6 +712,7 @@ class Enemy(pygame.sprite.Sprite):
         pass
 
     def update(self):
+        global kills
         k = 0
         self.timee = pygame.time.get_ticks()
         if self.timee - self.last_attack_time >= 1000:
@@ -716,8 +729,9 @@ class Enemy(pygame.sprite.Sprite):
 
         if k == 2:  # если обе двери уничтожены, больше не проверять их наличие
             self.make_check = False
-        if self.health == 0:
+        if self.health <= 0:
             self.kill()
+            kills += 1
 
 
 class Boss(pygame.sprite.Sprite):
@@ -771,7 +785,7 @@ class Boss(pygame.sprite.Sprite):
     def draw(self, surf):
         if self.health < 0:
             self.health = 0
-        BAR_LENGTH_1 = 100
+        BAR_LENGTH_1 = 300
         BAR_HEIGHT_1 = 15
         fill_1 = (self.health / 100) * BAR_LENGTH_1
         outline_rect_1 = pygame.Rect(self.rect.x + 110, self.rect.y + 70, BAR_LENGTH_1, BAR_HEIGHT_1)
@@ -786,6 +800,7 @@ class Boss(pygame.sprite.Sprite):
         pass
 
     def update(self):
+        global kills
         k = 0
         self.timee = pygame.time.get_ticks()
         if self.timee - self.last_attack_time >= 1000:
@@ -802,8 +817,9 @@ class Boss(pygame.sprite.Sprite):
 
         if k == 2:  # если обе двери уничтожены, больше не проверять их наличие
             self.make_check = False
-        if self.health == 0:
+        if self.health <= 0:
             self.kill()
+            kills += 1
 
 
 def blit_text(surface, text, pos, font, color=pygame.Color('white')):
@@ -843,6 +859,8 @@ def generate_level(level):
                 new_player = Player(x, y)
             elif level[y][x] == '$':
                 Tile('empty', x, y, True, (str(x) + str(y)))
+                print((str(x) + str(y)) + ' 1level')
+                print('---')
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -972,7 +990,9 @@ def level1():
                        f'----------------------------------------------------\n'
                        f'{str(datetime.datetime.now())}\n'
                        f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                       f'Статус игры: Поражение')
+                       f'Статус игры: Поражение\n'
+                       f'Убито врагов: {kills} \n'
+                       f'Съедено яблок: {number_of_apples}')
             player.index = 0
             player.images = player.images_dead
             player.image = player.images[0]
@@ -989,12 +1009,7 @@ portal_created = False
 
 
 def level2():
-    def create_portal():
-        global portal_created
-        if not portal_created:
-            portal2 = Portal(35, 5, portal_img, (50, 80))
-        portal_created = True
-
+    portal2 = Portal(43, 5, portal_img, (50, 80))
     global level1on
     level1on = False
     wind_sound.stop()
@@ -1012,48 +1027,26 @@ def level2():
                 BlockTile('sand_wall', x, y)
             elif level02[y][x] == '$':
                 Tile('sand', x, y, True, (str(x) + str(y)))
+                print((str(x) + str(y)) + ' 2level')
+                print('---')
     global player
     global level_x
     global level_y
-    black_l = Black(0, 0)
-    enemy1 = Enemy(480, 65, (134, 135), 1)
-    enemy2 = Enemy(1100, 160, (255, 256), 1)
+    global portal_created
+    global boss_killed
+    portal2.image.set_alpha(0)
+    black_l_sand = Black(0, 0)
+    enemy_sand_1 = Enemy(480, 65, (133, 134), 1)
+    enemy_sand_2 = Enemy(1100, 160, (255, 256), 1)
     boss = Boss(1900, 70, (0, 0))
-    big_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
-                 (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
-    apple = HealingApple(10, 10, 'apple.png', (70, 40))
-
-    # for e in big_trees:  # Проходимся по массиву и создаём деревья
-    # new_tree = DecorCreate(e[0], e[1], 'winter_tree.png', (150, 150))
-    # группа, содержащая все спрайты
+    big_sand_trees = [(0, 1), (2, 0), (4, 0), (6, 0), (19, 3), (15, 3), (-0.3, 2), (0, 3),
+                      (0.3, 4), (3, 5), (5, 5), (7, 5), (1, 5), (21, 7)]  # Массив с координатами деревьев
+    apple_sand = HealingApple(10, 10, 'apple.png', (70, 40))
     all_sprites = pygame.sprite.Group()
     running = True
     clock = pygame.time.Clock()
     while running:
         dt = clock.tick(FPS) / 1000  # Amount of seconds between each loop.
-        if portal.rect.colliderect(player.rect):
-            portal_group.empty()
-            tiles_group.empty()
-            enemy_group.empty()
-            decor_group.empty()
-            player_group.empty()
-            healing_apples_group.empty()
-            block_tiles_group.empty()
-            file = open('data/history_results.txt', 'r', encoding='utf-16')
-            text = file.readlines()
-            file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'----------------------------------------------------\n'
-                f'{str(datetime.datetime.now())}\n'
-                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
-                f'Статус игры: Победа\n'
-                f'{''.join(text)}')
-            win_screeen()
-            pygame.mixer.pause()
-            break
-            return
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -1105,10 +1098,11 @@ def level2():
             enemy_class.update_frame_dependent()
 
         player.update()
-        portal.update(dt)
+        if portal2.my_alpha == 255:
+            portal2.update(dt)
         player.update_time_dependent(dt)
         player.update_frame_dependent()
-        black_l.update()
+        black_l_sand.update()
         all_sprites.update()
         screen.fill('Black')
         for block in tiles_group:
@@ -1128,7 +1122,10 @@ def level2():
         player_group.draw(screen)
         player.draw(screen)
         if boss.health <= 0:
-            create_portal()
+            boss_killed = True
+            portal2.image.set_alpha(255)
+            portal2.my_alpha = 255
+
         if player.health <= 0:
             file = open('data/history_results.txt', 'r', encoding='utf-16')
             text = file.readlines()
@@ -1140,6 +1137,8 @@ def level2():
                 f'{str(datetime.datetime.now())}\n'
                 f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
                 f'Статус игры: Поражение\n'
+                f'Убито {kills} врагов\n'
+                f'Съедено {number_of_apples} яблок\n'
                 f'{''.join(text)}')
             player.index = 0
             player.images = player.images_dead
@@ -1153,6 +1152,31 @@ def level2():
                 file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
             end_screen()
             break
+
+        if portal2.rect.colliderect(player.rect) and boss_killed:
+            file = open('data/history_results.txt', 'r', encoding='utf-16')
+            text = file.readlines()
+            file = open('data/history_results.txt', 'w', encoding='utf-16')
+            file.write(
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'----------------------------------------------------\n'
+                f'{str(datetime.datetime.now())}\n'
+                f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
+                f'Статус игры: Победа\n'
+                f'Убито врагов: {kills} \n'
+                f'Съедено яблок: {number_of_apples} \n'
+                f'{''.join(text)}')
+            player_group.draw(screen)
+            player.can_move = False
+            pygame.mixer.pause()
+            file = open('history_results.txt', 'w', encoding='utf-8')
+            file_check = open('history_results.txt', 'r', encoding='utf-8')
+            if file_check.readlines() == '':
+                file.write(f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд')
+            win_screen()
+            break
+
         clock.tick(FPS)
         pygame.display.flip()
 
