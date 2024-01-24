@@ -1244,5 +1244,3 @@ level1()
 player, level_x, level_y = generate_level(load_level('map1.txt'))
 level2()
 pygame.quit()
-
-# 54
