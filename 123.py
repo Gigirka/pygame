@@ -136,7 +136,7 @@ def win_screen():
         f'Статус игры: Победа\n'
         f'Убито врагов: {kills}\n'
         f'Съедено яблок:{number_of_apples}\n'
-        f'{''.join(text)}')
+        f'{"".join(text)}')
     objects.remove(start_button)
     while True:
         for event in pygame.event.get():
@@ -157,13 +157,13 @@ def end_screen():
     pygame.draw.rect(fon, (255, 0, 0, 65), (0, 0, width, height))
     screen.blit(fon, (0, 0))
     blit_text(screen, 'GAME     OVER', (width // 2 - 400, height // 2 - 70), pygame.font.Font(None, 150),
-              color=pygame.Color('black'))
+              color=pygame.Color('white'))
     blit_text(screen,
               f'Время в игре: {round(end_time / 1000 - 3, 1)} секунд\n'
               f'Убито врагов: {kills}\n'
               f'Съедено яблок: {number_of_apples}', (width // 2 - 500, 20),
               pygame.font.Font(None, 50),
-              color=pygame.Color('black'))
+              color=pygame.Color('white'))
     objects.remove(start_button)
     file = open('data/history_results.txt', 'r', encoding='utf-16')
     text = file.readlines()
@@ -177,7 +177,7 @@ def end_screen():
         f'Статус игры: Поражение\n'
         f'Убито врагов: {kills}\n'
         f'Съедено яблок: {number_of_apples}\n'
-        f'{''.join(text)}')
+        f'{"".join(text)}')
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -1025,7 +1025,7 @@ def level1():
             file = open('data/history_results.txt', 'r', encoding='utf-16')
             text = file.readlines()
             file = open('data/history_results.txt', 'w', encoding='utf-16')
-            file.write(f'{''.join(text)}\n'
+            file.write(f'{"".join(text)}\n'
                        f'----------------------------------------------------\n'
                        f'----------------------------------------------------\n'
                        f'----------------------------------------------------\n'
