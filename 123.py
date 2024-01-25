@@ -900,8 +900,8 @@ def generate_level(level):
                 new_player = Player(x, y)
             elif level[y][x] == '$':
                 Tile('empty', x, y, True, (str(x) + str(y)))
-                print((str(x) + str(y)) + ' 1level')
-                print('---')
+                # print((str(x) + str(y)) + ' 1level')
+                # print('---')
     # вернем игрока, а также размер поля в клетках
     return new_player, x, y
 
@@ -1072,8 +1072,8 @@ def level2():
                 BlockTile('sand_wall', x, y)
             elif level02[y][x] == '$':
                 Tile('sand', x, y, True, (str(x) + str(y)))
-                print((str(x) + str(y)) + ' 2level')
-                print('---')
+                # print((str(x) + str(y)) + ' 2level')
+                # print('---')
     global player
     global level_x
     global level_y
